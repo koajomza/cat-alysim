@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Run All",
+      "configurations": [
+        "Next.js",
+        "Expo"
+      ]
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Next.js",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm --filter web dev"
+    },
+    {
+      "name": "Expo",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm --filter mobile dev"
+    }
+  ]
+}

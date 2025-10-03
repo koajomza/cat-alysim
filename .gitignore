@@ -1,0 +1,15 @@
+
+node_modules
+pnpm-lock.yaml
+.next
+dist
+build
+.expo
+.expo-shared
+.env
+.env.*
+apps/web/.env.local
+apps/mobile/.env
+supabase/.temp
+.DS_Store
+Thumbs.db

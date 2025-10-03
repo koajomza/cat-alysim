@@ -1,0 +1,11 @@
+
+> mobile@0.0.1 dev C:\Users\Donlatum Srijanthong\cat-alysim\apps\mobile
+> expo start
+
+Starting project at C:\Users\Donlatum Srijanthong\cat-alysim\apps\mobile
+Starting Metro Bundler
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native@0.74.3 - expected version: 0.74.5
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+  typescript@5.9.3 - expected version: ~5.3.3

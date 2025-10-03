@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev:all",
+      "type": "shell",
+      "command": "pnpm dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:web",
+      "type": "shell",
+      "command": "pnpm --filter web dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:mobile",
+      "type": "shell",
+      "command": "pnpm --filter mobile dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "build:all",
+      "type": "shell",
+      "command": "pnpm build",
+      "problemMatcher": []
+    }
+  ]
+}
