@@ -1,32 +1,13 @@
+# เขียน/ทับ README (PowerShell ใช้แบบนี้แทน echo >>)
+"# cat-alysim" | Set-Content -Encoding utf8 README.md
 
-# CAT-ALYSIM Monorepo
+git add .
+git commit -m "first commit (with README)"
 
-Web (Next.js) + Mobile (Expo) + Supabase Edge Function + Shared packages.
+# ชี้ remote (ถ้าเคยชี้แล้วจะ error ก็ใช้ set-url ด้านล่าง)
+git remote add origin https://github.com/koajomza/cat-alysim.git
+# ถ้า error: remote 'origin' already exists
+# git remote set-url origin https://github.com/koajomza/cat-alysim.git
 
-## Dev
-
-```bash
-pnpm install
-pnpm dev            # run web + mobile
-# or
-pnpm --filter web dev
-pnpm --filter mobile dev
-```
-
-## Env
-
-- apps/web/.env.local
-- apps/mobile/.env
-
-```
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-NEXT_PUBLIC_VERIFY_ENDPOINT=https://<project-ref>.functions.supabase.co/verify-paid
-```
-
-## Deploy function
-```
-supabase link --project-ref <REF>
-supabase secrets set SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=...
-supabase functions deploy verify-paid
-```
+git branch -M main
+git push -u origin main
