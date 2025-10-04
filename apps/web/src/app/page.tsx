@@ -17,7 +17,7 @@ export default function HomePage() {
 
         <div className="hero-img">
           <Image
-            src="/assets/conver.png"   // 👈 ใช้ชื่อ conver.png
+            src="/assets/cover.png"   // 👈 ใช้ชื่อ conver.png
             alt="CAT-ALYSIM preview"
             width={808}
             height={808}
