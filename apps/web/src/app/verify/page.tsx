@@ -1,7 +1,8 @@
-﻿import VerifyClient from "./VerifyClient";
+// apps/web/src/app/verify/page.tsx
+import VerifyClient from './VerifyClient';
 
-// ทำเพจนี้เป็น static ไปเลย
-export const dynamic = "force-static";
+// ทำให้เพจนี้เป็น static ไปเลย
+export const dynamic = 'force-static';
 
 export default function VerifyPage() {
   return <VerifyClient />;

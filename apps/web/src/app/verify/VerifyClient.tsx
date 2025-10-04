@@ -1,34 +1,34 @@
-﻿"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
-type St = "idle" | "loading" | "ok" | "fail";
+type St = 'idle' | 'loading' | 'ok' | 'fail';
 
 export default function VerifyClient() {
   const sp = useSearchParams();
-  const token = useMemo(() => sp.get("token") ?? "", [sp]);
-  const [status, setStatus] = useState<St>("idle");
+  const token = useMemo(() => sp.get('token') ?? '', [sp]);
+  const [status, setStatus] = useState<St>('idle');
   const [detail, setDetail] = useState<any>(null);
 
   useEffect(() => {
     if (!token) return;
     (async () => {
-      setStatus("loading");
+      setStatus('loading');
       try {
         const endpoint = process.env.NEXT_PUBLIC_VERIFY_ENDPOINT!;
         const res = await fetch(endpoint, {
-          method: "POST",               // ถ้า Function ใช้ GET เปลี่ยนเป็น GET + เอา body ออก
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.message || res.statusText);
         setDetail(data);
-        setStatus("ok");
+        setStatus('ok');
       } catch (e: any) {
         setDetail(String(e));
-        setStatus("fail");
+        setStatus('fail');
       }
     })();
   }, [token]);
@@ -38,13 +38,13 @@ export default function VerifyClient() {
       <div className="mx-auto max-w-2xl rounded-2xl border border-slate-700 bg-slate-900/70 p-6">
         <h1 className="text-xl font-semibold mb-1">Verify</h1>
         {!token && <p className="text-rose-400">ไม่พบ token</p>}
-        {token && status === "loading" && <p className="text-sky-300">กำลังตรวจสอบ…</p>}
-        {status === "ok" && (
+        {token && status === 'loading' && <p className="text-sky-300">กำลังตรวจสอบ…</p>}
+        {status === 'ok' && (
           <pre className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 overflow-auto text-sm">
             {JSON.stringify(detail, null, 2)}
           </pre>
         )}
-        {status === "fail" && (
+        {status === 'fail' && (
           <pre className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 overflow-auto text-sm">
             {String(detail)}
           </pre>
