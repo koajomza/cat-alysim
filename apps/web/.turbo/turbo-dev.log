@@ -4,11 +4,218 @@
 
   ▲ Next.js 14.2.5
   - Local:        http://localhost:3000
+  - Environments: .env.local
 
  ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
+ ✓ Ready in 2.9s
+ ○ Compiling / ...
+ ✓ Compiled / in 1041ms (545 modules)
+ GET / 200 in 1312ms
+ ○ Compiling /icon.png ...
+ ✓ Compiled /icon.png in 783ms (317 modules)
+ GET /icon.png?828d55c7153efe00 200 in 923ms
+ ✓ Compiled in 487ms (575 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 536ms (719 modules)
+ GET /icon.png?828d55c7153efe00 200 in 22ms
+ ✓ Compiled /dashboard in 314ms (725 modules)
+ ✓ Compiled /_not-found in 212ms (728 modules)
+ GET /docs 404 in 99ms
+ ✓ Compiled /contact in 318ms (732 modules)
+ GET /icon.png?828d55c7153efe00 200 in 23ms
+ ✓ Compiled /signup in 428ms (738 modules)
+ ✓ Compiled in 677ms (701 modules)
+ ✓ Compiled in 220ms (701 modules)
+ ✓ Compiled in 327ms (701 modules)
+ ✓ Compiled in 433ms (701 modules)
+ GET / 200 in 150ms
+ ✓ Compiled /icon.png in 182ms (402 modules)
+ GET /icon.png?828d55c7153efe00 200 in 272ms
+ ✓ Compiled in 308ms (731 modules)
+ GET / 200 in 132ms
+ GET /icon.png?828d55c7153efe00 200 in 14ms
+ ✓ Compiled in 225ms (731 modules)
+ GET / 200 in 99ms
+ GET /icon.png?828d55c7153efe00 200 in 10ms
+ ✓ Compiled in 410ms (731 modules)
+ GET / 200 in 79ms
+ ✓ Compiled in 406ms (701 modules)
+ ✓ Compiled in 202ms (701 modules)
+ ✓ Compiled in 210ms (701 modules)
+ ✓ Compiled in 185ms (701 modules)
+ ✓ Compiled in 271ms (701 modules)
+ ⨯ ./src/app/page.tsx
+Error: 
+  [31mx[0m Unexpected token `main`. Expected jsx identifier
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\page.tsx[0m:6:1]
+ [2m 6[0m | 
+ [2m 7[0m | export default function HomePage() {
+ [2m 8[0m |   return (
+ [2m 9[0m |     <main className="container" id="top" style={{ padding-left: 10 }}>
+    : [31;1m     ^^^^[0m
+ [2m10[0m |       <section className="hero" style={{ marginBottom: 20 }}>
+ [2m11[0m |         <div className="hero-text">
+ [2m12[0m |           <h1>โปรแกรมทำสำนวนการสอบสวน</h1>
+    `----
 
+Caused by:
+    Syntax Error
 
+Import trace for requested module:
+./src/app/page.tsx
+ ✓ Compiled in 226ms (701 modules)
+ ✓ Compiled in 397ms (701 modules)
+ ✓ Compiled in 201ms (701 modules)
+ ✓ Compiled in 201ms (701 modules)
+ ✓ Compiled in 255ms (701 modules)
+ ✓ Compiled in 270ms (701 modules)
+ ✓ Compiled in 306ms (701 modules)
+ ✓ Compiled in 281ms (701 modules)
+ ✓ Compiled in 193ms (701 modules)
+ ✓ Compiled in 172ms (701 modules)
+ ✓ Compiled in 173ms (701 modules)
+ ✓ Compiled in 186ms (701 modules)
+ ✓ Compiled in 353ms (701 modules)
+ ✓ Compiled in 208ms (701 modules)
+ ✓ Compiled in 239ms (701 modules)
+ GET / 200 in 197ms
+ ✓ Compiled /icon.png in 259ms (402 modules)
+ GET /icon.png?828d55c7153efe00 200 in 359ms
+ ✓ Compiled in 583ms (707 modules)
+ GET / 200 in 153ms
+ ✓ Compiled /icon.png in 111ms (405 modules)
+ GET /icon.png?828d55c7153efe00 200 in 199ms
+ GET / 200 in 129ms
+ GET /icon.png?828d55c7153efe00 200 in 9ms
+ ⨯ ./src/app/page.tsx
+Error: 
+  [31mx[0m Unexpected token `main`. Expected jsx identifier
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\page.tsx[0m:6:1]
+ [2m 6[0m | 
+ [2m 7[0m | export default function HomePage() {
+ [2m 8[0m |   return (
+ [2m 9[0m |     <main className="container" id="top" style={{ padding: 0 }}>
+    : [31;1m     ^^^^[0m
+ [2m10[0m |       <section className="hero" style={{ marginBottom: 10 }}>
+ [2m11[0m |         <div className="hero-text">
+ [2m12[0m |           <h1>โปรแกรมทำสำนวนการสอบสวน</h1>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/page.tsx
+ ⨯ ./src/app/page.tsx
+Error: 
+  [31mx[0m Unexpected token `main`. Expected jsx identifier
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\page.tsx[0m:6:1]
+ [2m 6[0m | 
+ [2m 7[0m | export default function HomePage() {
+ [2m 8[0m |   return (
+ [2m 9[0m |     <main className="container" id="top" style={{ padding: 0 }}>
+    : [31;1m     ^^^^[0m
+ [2m10[0m |       <section className="hero" style={{ marginBottom: 10 }}>
+ [2m11[0m |         <div className="hero-text">
+ [2m12[0m |           <h1>โปรแกรมทำสำนวนการสอบสวน</h1>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/page.tsx
+ ✓ Compiled in 260ms (731 modules)
+ ✓ Compiled in 456ms (731 modules)
+ ✓ Compiled in 210ms (731 modules)
+ GET / 200 in 153ms
+ ⨯ ./src/app/layout.tsx
+Error: 
+  [31mx[0m Expression expected
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\layout.tsx[0m:60:1]
+ [2m60[0m | /* Put the following in apps/web/src/app/globals.css (or append to it) */
+ [2m61[0m | /* ------------------------------------------------------------------ */
+ [2m62[0m | 
+ [2m63[0m | :root{
+    : [31;1m^[0m
+ [2m64[0m |   --bg-1: 10 10 20; /* rgb as numbers for use with color-notation */
+ [2m65[0m |   --bg-2: 18 24 40;
+ [2m66[0m |   --accent-1: 102 126 234; /* purple-blue */
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/layout.tsx
+ GET / 500 in 1667ms
+ GET / 500 in 508ms
+ ○ Compiling /_error ...
+ GET / 500 in 539ms
+ ⨯ ./src/app/layout.tsx
+Error: 
+  [31mx[0m Expression expected
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\layout.tsx[0m:60:1]
+ [2m60[0m | /* Put the following in apps/web/src/app/globals.css (or append to it) */
+ [2m61[0m | /* ------------------------------------------------------------------ */
+ [2m62[0m | 
+ [2m63[0m | :root{
+    : [31;1m^[0m
+ [2m64[0m |   --bg-1: 10 10 20; /* rgb as numbers for use with color-notation */
+ [2m65[0m |   --bg-2: 18 24 40;
+ [2m66[0m |   --accent-1: 102 126 234; /* purple-blue */
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/layout.tsx
+ ⨯ ./src/app/layout.tsx
+Error: 
+  [31mx[0m Expression expected
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\layout.tsx[0m:60:1]
+ [2m60[0m | /* Put the following in apps/web/src/app/globals.css (or append to it) */
+ [2m61[0m | /* ------------------------------------------------------------------ */
+ [2m62[0m | 
+ [2m63[0m | :root{
+    : [31;1m^[0m
+ [2m64[0m |   --bg-1: 10 10 20; /* rgb as numbers for use with color-notation */
+ [2m65[0m |   --bg-2: 18 24 40;
+ [2m66[0m |   --accent-1: 102 126 234; /* purple-blue */
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/layout.tsx
+ GET / 500 in 616ms
+ GET / 500 in 27ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Donlatum Srijanthong\cat-alysim\apps\web\.next\cache\webpack\client-development-fallback\0.pack.gz_' -> 'C:\Users\Donlatum Srijanthong\cat-alysim\apps\web\.next\cache\webpack\client-development-fallback\0.pack.gz'
+ ✓ Compiled /_not-found in 922ms (927 modules)
+ GET / 200 in 69ms
+ ✓ Compiled /icon.png in 165ms (443 modules)
+ GET /icon.png?828d55c7153efe00 200 in 246ms
+ ⨯ ./src/app/layout.tsx
+Error: 
+  [31mx[0m You are attempting to export "metadata" from a component marked with "use client", which is disallowed. Either remove the export, or the "use client" directive. Read more: https://nextjs.org/
+  [31m|[0m docs/getting-started/react-essentials#the-use-client-directive
+  [31m|[0m 
+  [31m|[0m 
+    ,-[[36;1;4mC:\Users\Donlatum Srijanthong\cat-alysim\apps\web\src\app\layout.tsx[0m:5:1]
+ [2m 5[0m | import type { Metadata } from "next";
+ [2m 6[0m | import Link from "next/link";
+ [2m 7[0m | 
+ [2m 8[0m | export const metadata: Metadata = {
+    : [31;1m             ^^^^^^^^[0m
+ [2m 9[0m |   title: "CAT-ALYSIM",
+ [2m10[0m |   description: "ระบบสอบสวนออนไลน์ - เอกสารอัตโนมัติ + แชท realtime",
+ [2m11[0m | };
+    `----
+
+Import trace for requested module:
+./src/app/layout.tsx
+ GET / 500 in 21ms
+ GET / 500 in 11ms
+ ✓ Compiled in 271ms (924 modules)
