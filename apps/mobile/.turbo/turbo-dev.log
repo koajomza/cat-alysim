@@ -7,5 +7,5 @@ Starting Metro Bundler
 The following packages should be updated for best compatibility with the installed expo version:
   react-native@0.74.3 - expected version: 0.74.5
   typescript@5.9.3 - expected version: ~5.3.3
-Your project may not work correctly until you install the expected versions of the packages.
 Waiting on http://localhost:8081
+Your project may not work correctly until you install the expected versions of the packages.

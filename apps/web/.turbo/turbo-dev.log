@@ -1,0 +1,19 @@
+
+> web@0.0.1 dev C:\Users\Donlatum Srijanthong\cat-alysim\apps\web
+> next dev
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 1009ms (545 modules)
+ GET / 200 in 1285ms
+ ○ Compiling /icon.png ...
+ ✓ Compiled /icon.png in 628ms (317 modules)
+ GET /icon.png?828d55c7153efe00 200 in 731ms
+ ✓ Compiled in 279ms (575 modules)
+ GET / 200 in 134ms
+ GET / 200 in 62ms
