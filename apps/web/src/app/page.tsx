@@ -37,12 +37,12 @@ export default function HomePage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 28,
+            gap: 170,
           }}
         >
           {/* --- คดีอาญา --- */}
-          <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <h2 style={{ margin: 0 }}>คดีอาญา</h2>
+          <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <h1 style={{ margin: 0,textAlign:"center" }}>สร้างสำนวนการสอบสวน</h1> 
 
             <div
               className="preview-row"
@@ -62,6 +62,7 @@ export default function HomePage() {
                   priority
                   style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
                 />
+                  <h4>การสร้างสำนวนการสอบสวนทำได้โดยง่าย</h4>
               </div>
 
               <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
@@ -90,7 +91,7 @@ export default function HomePage() {
 
           {/* --- คดีจราจร --- */}
           <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <h2 style={{ margin: 0 }}>คดีจราจร</h2>
+            <h1 style={{ margin: 0,textAlign:"center" }}>คดีจราจร</h1>
 
             <div
               className="preview-row"
@@ -138,7 +139,7 @@ export default function HomePage() {
 
           {/* --- คดียาเสพติด --- */}
           <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <h2 style={{ margin: 0 }}>คดียาเสพติด</h2>
+            <h1 style={{ margin: 0,textAlign:"center" }}>คดียาเสพติด</h1>
 
             <div
               className="preview-row"
