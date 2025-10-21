@@ -1,4 +1,3 @@
-// apps/web/src/app/page.tsx
 "use client";
 
 import Image from "next/image";
@@ -6,199 +5,88 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="container" id="top" style={{ padding: 0 }}>
-      <section className="hero" style={{ marginBottom: 0 }}>
-        <div className="hero-text">
-          <h1>โปรแกรมทำสำนวนการสอบสวน</h1>
-          <p className="hero-sub">
-            เอกสารอัตโนมัติ แชท realtime และ OCR — รวมอยู่ที่นี่
-          </p>
+    <main className="container mx-auto px-4 md:px-8" id="top">
+      <section className="hero mb-6 text-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-center leading-tight md:leading-snug">
+          โปรแกรมทำสำนวนการสอบสวน
+        </h1>
 
-          <div className="cta" style={{ marginTop: 12 }}>
-            <a className="btn primary" href="#download" style={{ marginRight: 8 }}>ดาวน์โหลด</a>
-            <a className="btn outline" href="#demo" style={{ marginRight: 8 }}>ทดลองใช้งาน</a>
-            <Link className="btn ghost" href="/login">เข้าสู่ระบบ</Link>
-          </div>
+        <p className="hero-sub text-sm md:text-base mt-2">
+          เอกสารอัตโนมัติ แชท realtime และ OCR — รวมอยู่ที่นี่
+        </p>
 
-          <div className="hero-features" style={{ marginTop: 12 }}>
-            <ul style={{ paddingLeft: 18 }}>
-              <li>เอกสารอัตโนมัติ</li>
-              <li>OCR อ่านบัตร/เอกสาร</li>
-              <li>แชท realtime + sync</li>
-            </ul>
-          </div>
+        <div className="cta flex flex-col sm:flex-row justify-center gap-2 mt-3">
+          <a className="btn primary" href="#download">
+            ดาวน์โหลด
+          </a>
+          <a className="btn outline" href="#demo">
+            ทดลองใช้งาน
+          </a>
+          <Link className="btn ghost" href="/login">
+            เข้าสู่ระบบ
+          </Link>
         </div>
+
+        <ul className="hero-features mt-3 list-disc list-inside text-left sm:text-center">
+          <li>เอกสารอัตโนมัติ</li>
+          <li>OCR อ่านบัตร/เอกสาร</li>
+          <li>แชท realtime + sync</li>
+        </ul>
       </section>
 
-      {/* preview section - each category has a title + a row of 3 images */}
-      <section className="preview" id="center" style={{ marginTop: 8 }}>
-        <div
-          className="program-preview"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 170,
-          }}
-        >
-          {/* --- คดีอาญา --- */}
-          <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <h1 style={{ margin: 0,textAlign:"center" }}>สร้างสำนวนการสอบสวน</h1> 
+      {/* preview section */}
+      <section className="preview mt-8">
+        {[
+          { title: "สร้างสำนวนการสอบสวน", key: "criminal" },
+          { title: "คดีจราจร", key: "traffic" },
+          { title: "คดียาเสพติด", key: "drug" },
+        ].map((group) => (
+          <div key={group.key} className="preview-group mb-6">
+            <h2 className="text-xl md:text-2xl font-semibold text-center mb-2">
+              {group.title}
+            </h2>
 
-            <div
-              className="preview-row"
-              style={{
-                display: "flex",
-                gap: 12,
-                alignItems: "stretch",
-                flexWrap: "wrap", // ห่อเมื่อหน้าจอแคบ
-              }}
-            >
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดีอาญา - 1"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-                  <h4>การสร้างสำนวนการสอบสวนทำได้โดยง่าย</h4>
-              </div>
-
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดีอาญา - 2"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดีอาญา - 3"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
+            <div className="preview-row flex flex-wrap gap-3 justify-center">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex-1 min-w-[160px] max-w-[520px] flex flex-col items-center"
+                >
+                  <Image
+                    src="/assets/cover.png"
+                    alt={`${group.title} - ${i}`}
+                    width={520}
+                    height={920}
+                    priority
+                    className="w-full h-auto object-cover rounded-md"
+                  />
+                  {i === 1 && group.key === "criminal" && (
+                    <h4 className="mt-2 text-center text-sm md:text-base font-medium">
+                      การสร้างสำนวนการสอบสวนทำได้โดยง่าย
+                    </h4>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-
-          {/* --- คดีจราจร --- */}
-          <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <h1 style={{ margin: 0,textAlign:"center" }}>คดีจราจร</h1>
-
-            <div
-              className="preview-row"
-              style={{
-                display: "flex",
-                gap: 12,
-                alignItems: "stretch",
-                flexWrap: "wrap",
-              }}
-            >
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดีจราจร - 1"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดีจราจร - 2"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดีจราจร - 3"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* --- คดียาเสพติด --- */}
-          <div className="preview-group" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <h1 style={{ margin: 0,textAlign:"center" }}>คดียาเสพติด</h1>
-
-            <div
-              className="preview-row"
-              style={{
-                display: "flex",
-                gap: 12,
-                alignItems: "stretch",
-                flexWrap: "wrap",
-              }}
-            >
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดียาเสพติด - 1"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดียาเสพติด - 2"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-
-              <div style={{ flex: "1 1 calc(33.333% - 8px)", minWidth: 160, maxWidth: 520 }}>
-                <Image
-                  src="/assets/cover.png"
-                  alt="คดียาเสพติด - 3"
-                  width={520}
-                  height={920}
-                  priority
-                  style={{ width: "100%", height: "auto", objectFit: "cover", borderRadius: 6 }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </section>
 
-      <section id="features" className="features container-section" style={{ marginTop: 32 }}>
-        <div className="card">
-          <h3>เอกสาร</h3>
-          <p>สร้างคำร้อง หมายเรียก และสำนวนอัตโนมัติ</p>
+      <section
+        id="features"
+        className="features container-section flex flex-col sm:flex-row justify-center gap-4 mt-8"
+      >
+        <div className="card flex-1 text-center p-4 border rounded-md">
+          <h3 className="font-semibold">เอกสาร</h3>
+          <p className="mt-1 text-sm">สร้างคำร้อง หมายเรียก และสำนวนอัตโนมัติ</p>
         </div>
-        <div className="card">
-          <h3>OCR</h3>
-          <p>อ่านบัตรประชาชน ใบอนุญาต แบบแม่นยำ</p>
+        <div className="card flex-1 text-center p-4 border rounded-md">
+          <h3 className="font-semibold">OCR</h3>
+          <p className="mt-1 text-sm">อ่านบัตรประชาชน ใบอนุญาต แบบแม่นยำ</p>
         </div>
-        <div className="card">
-          <h3>Realtime Chat</h3>
-          <p>คุย/แชร์ไฟล์ และซิงก์กับ Supabase</p>
+        <div className="card flex-1 text-center p-4 border rounded-md">
+          <h3 className="font-semibold">Realtime Chat</h3>
+          <p className="mt-1 text-sm">คุย/แชร์ไฟล์ และซิงก์กับ Supabase</p>
         </div>
       </section>
     </main>
