@@ -1,5 +1,5 @@
 
-> web@0.0.1 dev C:\Users\Donlatum Srijanthong\cat-alysim\apps\web
+> cat-alysim-web@0.1.0 dev C:\Users\Donlatum Srijanthong\cat-alysim\apps\web
 > next dev
 
   ▲ Next.js 14.2.5
@@ -7,13 +7,137 @@
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 2.7s
+ ✓ Ready in 3.5s
  ○ Compiling / ...
- ✓ Compiled / in 1009ms (545 modules)
- GET / 200 in 1285ms
+ ✓ Compiled / in 4.7s (528 modules)
+ GET / 200 in 5060ms
  ○ Compiling /icon.png ...
- ✓ Compiled /icon.png in 628ms (317 modules)
- GET /icon.png?828d55c7153efe00 200 in 731ms
- ✓ Compiled in 279ms (575 modules)
- GET / 200 in 134ms
- GET / 200 in 62ms
+ ✓ Compiled /icon.png in 5.2s (302 modules)
+ GET /icon.png?828d55c7153efe00 200 in 5308ms
+ ✓ Compiled in 276ms (558 modules)
+ GET /icon.png?828d55c7153efe00 200 in 21ms
+ GET / 200 in 96ms
+ ✓ Compiled in 405ms (514 modules)
+ ○ Compiling /signup ...
+ ✓ Compiled /signup in 1540ms (660 modules)
+ ✓ Compiled /icon.png in 89ms (380 modules)
+ GET /icon.png?828d55c7153efe00 200 in 151ms
+ ✓ Compiled /login in 215ms (696 modules)
+ GET /icon.png?828d55c7153efe00 200 in 22ms
+ GET /icon.png?828d55c7153efe00 200 in 6ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 565ms (699 modules)
+ GET /docs 404 in 157ms
+ ○ Compiling /contact ...
+ ✓ Compiled /contact in 509ms (703 modules)
+ GET /icon.png?828d55c7153efe00 200 in 10ms
+ ✓ Compiled in 510ms (677 modules)
+ GET / 200 in 120ms
+ ✓ Compiled /icon.png in 151ms (380 modules)
+ GET /icon.png?828d55c7153efe00 200 in 246ms
+ ✓ Compiled in 682ms (663 modules)
+ ✓ Compiled in 284ms (677 modules)
+ ✓ Compiled /icon.png in 74ms (380 modules)
+ GET /icon.png?828d55c7153efe00 200 in 146ms
+ ✓ Compiled in 369ms (677 modules)
+ ✓ Compiled in 201ms (677 modules)
+ ✓ Compiled in 411ms (669 modules)
+ ⨯ ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+
+Import trace for requested module:
+  ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\dist\index\index.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\style.js
+  ./src\app\layout.tsx
+ ⨯ ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+
+Import trace for requested module:
+  ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\dist\index\index.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\style.js
+  ./src\app\layout.tsx
+ ○ Compiling /_error ...
+ ⨯ ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+
+Import trace for requested module:
+  ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\dist\index\index.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\style.js
+  ./src\app\layout.tsx
+ GET / 500 in 4520ms
+ ⨯ ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+
+Import trace for requested module:
+  ./..\..\node_modules\.pnpm\next@14.2.5_react-dom@18.2.0_react@18.2.0__react@18.2.0\node_modules\next\dist\compiled\client-only\error.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\dist\index\index.js
+  ./..\..\node_modules\.pnpm\styled-jsx@5.1.1_react@18.2.0\node_modules\styled-jsx\style.js
+  ./src\app\layout.tsx
+ GET /_next/static/webpack/ab4bef510279e19d.webpack.hot-update.json 500 in 462ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 500 in 15ms
+ GET / 500 in 11ms
+ ✓ Compiled /_not-found in 570ms (896 modules)
+ GET / 200 in 84ms
+ ○ Compiling /icon.png ...
+ ✓ Compiled /icon.png in 511ms (424 modules)
+ GET /icon.png?828d55c7153efe00 200 in 624ms
+ GET /docs 404 in 110ms
+ ✓ Compiled /contact in 222ms (427 modules)
+ GET /icon.png?828d55c7153efe00 200 in 22ms
+ GET / 200 in 116ms
+ GET /icon.png?828d55c7153efe00 200 in 11ms
+ GET / 200 in 37ms
+ GET /icon.png?828d55c7153efe00 200 in 11ms
+ ✓ Compiled in 543ms (893 modules)
+ GET / 200 in 167ms
+ ✓ Compiled /icon.png in 117ms (423 modules)
+ GET /icon.png?828d55c7153efe00 200 in 161ms
+ GET / 200 in 60ms
+ GET /icon.png?828d55c7153efe00 200 in 8ms
+ ✓ Compiled in 427ms (923 modules)
+ ✓ Compiled in 412ms (923 modules)
+ ✓ Compiled in 317ms (923 modules)
+ ✓ Compiled in 228ms (500 modules)
+ ✓ Compiled /login in 436ms (427 modules)
+ GET /icon.png?828d55c7153efe00 200 in 15ms
+ ✓ Compiled in 500ms (897 modules)
+ GET /login 200 in 230ms
+ ✓ Compiled /icon.png in 128ms (427 modules)
+ GET /icon.png?828d55c7153efe00 200 in 211ms
+ GET /login 200 in 162ms
+ GET /icon.png?828d55c7153efe00 200 in 21ms
+ GET /icon.png?828d55c7153efe00 200 in 13ms
+ ✓ Compiled in 479ms (927 modules)
+ GET / 200 in 180ms
+ GET /icon.png?828d55c7153efe00 200 in 21ms
+ GET /icon.png?828d55c7153efe00 200 in 13ms
+ ✓ Compiled in 478ms (897 modules)
+ ✓ Compiled in 261ms (897 modules)
+ ✓ Compiled /icon.png in 142ms (427 modules)
+ GET /icon.png?828d55c7153efe00 200 in 237ms
+ ✓ Compiled in 264ms (927 modules)
+ ✓ Compiled in 497ms (897 modules)
+ ✓ Compiled /icon.png in 151ms (427 modules)
+ GET /icon.png?828d55c7153efe00 200 in 224ms
+ ✓ Compiled in 590ms (897 modules)
+ GET /login 200 in 220ms
+ ✓ Compiled /icon.png in 150ms (427 modules)
+ GET /icon.png?828d55c7153efe00 200 in 231ms
+ GET /icon.png?828d55c7153efe00 200 in 9ms
+ GET /icon.png?828d55c7153efe00 200 in 11ms
+ ✓ Compiled in 528ms (927 modules)
+ ✓ Compiled in 286ms (927 modules)
+ ✓ Compiled in 579ms (897 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 670ms (900 modules)
+ ✓ Compiled /contact in 356ms (401 modules)
+ ✓ Compiled /icon.png in 138ms (431 modules)
+ GET /icon.png?828d55c7153efe00 200 in 223ms
+ GET /docs 404 in 104ms
+ GET /icon.png?828d55c7153efe00 200 in 44ms
+ ✓ Compiled in 558ms (930 modules)
+ GET /icon.png?828d55c7153efe00 200 in 20ms
