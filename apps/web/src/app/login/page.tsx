@@ -259,6 +259,8 @@ export default function LoginPage() {
           font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans Thai",sans-serif;
           background:#050607;
           -webkit-tap-highlight-color: transparent;
+          -webkit-text-size-adjust: 100%; /* ปิดการขยายอัตโนมัติของ Safari */
+          text-size-adjust: 100%;
         }
 
         .login-root{position:relative; min-height:100dvh; padding-bottom: env(safe-area-inset-bottom); }

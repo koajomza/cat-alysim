@@ -383,7 +383,8 @@ export default function SignupPage() {
         }
         *{box-sizing:border-box}
         html,body{height:100%}
-        body{margin:0; color:var(--text); background:#050607; font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans Thai",sans-serif;}
+        body{margin:0;-webkit-text-size-adjust: 100%; /* ปิดการขยายอัตโนมัติของ Safari */,
+          text-size-adjust: 100%; color:var(--text); background:#050607; font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans Thai",sans-serif;}
 
         .signup-root{position:relative; min-height:100svh;}
         .snow{position:fixed; inset:0; z-index:0; pointer-events:none;}

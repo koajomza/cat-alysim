@@ -153,6 +153,8 @@ export default function HomePage() {
           margin:0;background:#050507;color:var(--text);
           font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans Thai",sans-serif;
           -webkit-tap-highlight-color: transparent;
+          -webkit-text-size-adjust: 100%; /* ปิดการขยายอัตโนมัติของ Safari */
+          text-size-adjust: 100%;
         }
         .page{min-height:100dvh;position:relative;overflow-x:hidden;}
 
