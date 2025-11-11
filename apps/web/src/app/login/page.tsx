@@ -81,12 +81,15 @@ export default function LoginPage() {
       canvas.style.height = `${h}px`;
     };
     size();
-    const onResize = () => size();
+    const onResize = () => { 
+      size(); 
+      init(); 
+    };
     window.addEventListener("resize", onResize);
 
     const prefersReduce =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
+    const isNarrow = () => window.innerWidth <= 430;
     type Flake = {
       x: number; y: number; z: number;
       r: number; vy: number; swayAmp: number; swayFreq: number; phase: number; twinkle: number;
@@ -115,10 +118,14 @@ export default function LoginPage() {
 
     const init = () => {
       const base = Math.floor((canvas.width / DPR) * (canvas.height / DPR) / 12000);
-      const count = Math.min(280, prefersReduce ? Math.max(70, Math.floor(base * 0.5)) : base + 100);
+      const mobileFactor = isNarrow() ? 0.6 : 1;
+      const count = Math.min(
+        240,
+        prefersReduce ? Math.max(60, Math.floor(base * 0.45)) : Math.floor((base + 90) * mobileFactor)
+      );
       flakes = Array.from({ length: count }, () => spawn());
     };
-    init();
+    init(); 
 
     let raf = 0;
     const loop = () => {
@@ -240,6 +247,9 @@ export default function LoginPage() {
         :root{
           --panel:#121a2a; --text:#e6eeff; --muted:#a9b6d6;
           --line:rgba(255,255,255,0.10); --accent:#3d66ff;
+          --r-pad: 24px;               /* base spacing */
+          --r-radius: 22px;            /* base radius */
+          --r-font: 14px;              /* base font */
         }
         *{box-sizing:border-box}
         html,body{height:100%}
@@ -247,51 +257,53 @@ export default function LoginPage() {
           margin:0;
           color:var(--text);
           font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans Thai",sans-serif;
-          background:#050607; /* กันจอว่างตอน canvas ยังไม่วาด */
+          background:#050607;
+          -webkit-tap-highlight-color: transparent;
         }
 
-        .login-root{position:relative; min-height:100svh;}
+        .login-root{position:relative; min-height:100dvh; padding-bottom: env(safe-area-inset-bottom); }
         .snow{position:fixed; inset:0; z-index:0; pointer-events:none;}
 
         .center{
           position:relative; z-index:1;
-          min-height:100svh; display:grid; place-items:center; padding:24px;
+          min-height:100dvh; display:grid; place-items:center; padding:var(--r-pad);
         }
         .card{
           width:100%; max-width:520px;
           background: linear-gradient(180deg, rgba(20,30,48,.9), rgba(15,22,36,.82));
-          border-radius:22px; padding:24px;
+          border-radius:var(--r-radius); padding:var(--r-pad);
           border:1px solid var(--line);
-          box-shadow: 0 30px 120px rgba(0,0,0,.65), inset 0 0 0 1px rgba(255,255,255,.03);
+          box-shadow: 0 24px 90px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.03);
         }
         .card-head{display:flex;align-items:center;justify-content:center;}
-        .brand{font-weight:900;font-size:26px;letter-spacing:.5px;color:#e9f2ff;text-shadow:0 0 26px rgba(61,102,255,.28);}
-        .sub{margin-top:6px;font-size:13px;color:#cfe0ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;}
+        .brand{font-weight:900;font-size:clamp(20px,5.2vw,26px);letter-spacing:.4px;color:#e9f2ff;text-shadow:0 0 18px rgba(61,102,255,.22);}
+        .sub{margin-top:6px;font-size:clamp(11px,3.4vw,13px);color:#cfe0ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;}
 
-        .form{margin-top:14px;display:flex;flex-direction:column;gap:12px;}
+        .form{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
         .input{
           width:100%; background:rgba(255,255,255,0.06); color:var(--text);
           border:1px solid rgba(255,255,255,0.10); border-radius:12px; padding:10px 12px;
-          outline:none; font-size:14px; transition:border-color .15s ease, box-shadow .15s ease;
+          outline:none; font-size:clamp(13px,3.6vw,var(--r-font)); transition:border-color .15s ease, box-shadow .15s ease;
         }
-        .input:focus{ border-color:#6b8cff; box-shadow:0 0 0 3px rgba(107,140,255,.25); }
-        .input.pr{ padding-right:88px; }
+        .input:focus{ border-color:#6b8cff; box-shadow:0 0 0 3px rgba(107,140,255,.22); }
+        .input.pr{ padding-right:74px; } /* ลดเผื่อปุ่มตาในจอเล็ก */
 
         .input-wrap{position:relative}
         .eye-btn{
-          position:absolute; right:8px; top:6px; padding:6px 10px; border-radius:10px;
+          position:absolute; right:6px; top:6px; padding:6px 8px; border-radius:10px;
           border:1px solid #6b8cff; background:transparent; color:#dbe6ff;
-          cursor:pointer; font-weight:800; font-size:13px;
+          cursor:pointer; font-weight:800; font-size:12px;
           transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
         }
-        .eye-btn:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(107,140,255,.25); border-color:#87a0ff; }
+        .eye-btn:active{ transform:translateY(0); box-shadow:none; }
 
         .inline-links{
-          display:flex; align-items:center; justify-content:center; gap:8px;
-          font-size:13px; color:var(--muted);
+          display:flex; align-items:center; justify-content:center; gap:6px;
+          font-size:clamp(11px,3.2vw,13px); color:var(--muted);
+          flex-wrap:wrap;
         }
         .inline-links .tiny-link{
-          display:inline-block; padding:4px 10px; border-radius:10px; border:1px solid #6b8cff;
+          display:inline-block; padding:4px 8px; border-radius:10px; border:1px solid #6b8cff;
           color:#cfe0ff; font-weight:800; background:rgba(255,255,255,.03);
         }
         .inline-links .dot{opacity:.6; margin:0 2px;}
@@ -299,17 +311,25 @@ export default function LoginPage() {
         .btn.primary.full{
           width:100%; padding:12px 14px; border-radius:12px; font-weight:900; letter-spacing:.2px;
           border:1px solid transparent; background:linear-gradient(135deg, #3d66ff, #6b8cff); color:#fff;
-          box-shadow: 0 16px 42px rgba(61,102,255,.28); margin-top:6px;
+          box-shadow: 0 12px 28px rgba(61,102,255,.26); margin-top:4px; font-size:clamp(13px,3.6vw,15px);
         }
         .btn.primary.full:disabled{ opacity:.7; cursor:not-allowed; box-shadow:none; }
 
-        .status{ margin-top:12px; font-size:14px; color:#d7e6ff; }
+        .status{ margin-top:10px; font-size:clamp(12px,3.4vw,14px); color:#d7e6ff; }
 
-        @media (max-width:540px){
-          .card{padding:18px;border-radius:18px;}
-          .brand{font-size:22px}
+        /* ===== มือถือเล็กมาก (≤ 400px) ลด padding / radius / shadow ===== */
+        @media (max-width:400px){
+          :root{ --r-pad: 16px; --r-radius: 16px; --r-font: 13px; }
+          .card{ box-shadow: 0 16px 48px rgba(0,0,0,.45); }
+          .eye-btn{ font-size:11px; padding:5px 7px; }
+        }
+
+        /* Reduce Motion = เบาลงทั้งหิมะ/เงา */
+        @media (prefers-reduced-motion: reduce){
+          .btn:hover{ box-shadow:none; }
         }
       `}</style>
+
     </main>
   );
 }
