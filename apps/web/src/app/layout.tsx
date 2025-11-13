@@ -20,7 +20,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const version = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
   const lastUpdate = process.env.NEXT_PUBLIC_LAST_UPDATE ?? "—";
 
-  // CSS ทั้งหมดอยู่ในตัวไฟล์ ไม่พึ่ง globals.css และไม่ใช้ styled-jsx
   const css = `
   :root {
     --bg:#050507; --panel:#0a0f12; --text:#e6eef8; --muted:#9aa3ad;
@@ -95,7 +94,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     padding: 24px clamp(16px, 3vw, 28px);
   }
 
-  /* ===== Container ===== */
   .container {
     display:flex; align-items:center; justify-content:space-between;
     gap:16px; max-width:1200px; margin:0 auto; padding:0 clamp(16px, 3vw, 28px);
@@ -151,7 +149,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   .nav-btn.login:hover  { transform: translateY(-0.5px); border-color: var(--line); }
 
   /* ===== Mobile menu toggle (hamburger) ===== */
-  .nav-toggle {
+  #nav-toggle {
     position:absolute;
     width:1px; height:1px;
     opacity:0; pointer-events:none;
@@ -204,18 +202,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     border-color: rgba(0,208,132,0.6);
   }
 
-  /* toggle effect */
-  .nav-toggle:checked ~ .nav-mobile-menu {
-    display:block;
-  }
-  .nav-toggle:checked + .nav-burger span:nth-child(1) {
+  /* toggle effect: nav-toggle เป็น sibling ตัวแรกใน header
+     ใช้ ~ ไปหา .container และ .nav-mobile-menu */
+  #nav-toggle:checked ~ .container .nav-burger span:nth-child(1) {
     transform: translateY(4px) rotate(45deg);
   }
-  .nav-toggle:checked + .nav-burger span:nth-child(2) {
+  #nav-toggle:checked ~ .container .nav-burger span:nth-child(2) {
     opacity:0;
   }
-  .nav-toggle:checked + .nav-burger span:nth-child(3) {
+  #nav-toggle:checked ~ .container .nav-burger span:nth-child(3) {
     transform: translateY(-4px) rotate(-45deg);
+  }
+  #nav-toggle:checked ~ .nav-mobile-menu {
+    display:block;
   }
 
   /* ===== Footer ===== */
@@ -237,12 +236,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   /* ===== Responsive ===== */
   @media (max-width: 980px) {
-    .primary-links { display:none; }        /* ซ่อนเมนูฟีเจอร์/ดาวน์โหลด */
+    .primary-links { display:none; }
   }
 
   @media (max-width: 768px) {
-    .nav-actions { display:none; }         /* ซ่อนปุ่ม login/signup บนหัวแถบ */
-    .nav-burger { display:flex; }          /* โชว์ปุ่ม 3 ขีด */
+    .nav-actions { display:none; }
+    .nav-burger { display:flex; }
     .brand { padding-inline:10px; }
   }
 
@@ -269,10 +268,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="th" className={kanit.className}>
       <body>
-        {/* style แบบ RSC-safe ไม่พึ่ง styled-jsx */}
         <style dangerouslySetInnerHTML={{ __html: css }} />
 
-        {/* ===== Cosmic Background (pure CSS) ===== */}
+        {/* ===== Cosmic Background ===== */}
         <div className="bg-wrap" aria-hidden="true">
           <div className="bg-grad" />
           <div className="bg-aurora a" />
@@ -285,9 +283,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="bg-grid" />
         </div>
 
-        {/* ===== Nav (glass + neon) ===== */}
         <a id="top" className="sr-only" aria-hidden="true" />
+
+        {/* ===== Nav ===== */}
         <header className="nav">
+          {/* checkbox ต้องอยู่เป็น child ตัวแรกใน header
+              เพื่อให้ selector #nav-toggle:checked ~ ... ทำงาน */}
+          <input id="nav-toggle" type="checkbox" className="" />
+
           <div className="container nav-inner">
             <div className="nav-left">
               <Link href="/" className="brand" aria-label="กลับหน้าแรก">
@@ -302,14 +305,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </nav>
             </div>
 
-            {/* ปุ่ม login/signup สำหรับ desktop */}
+            {/* desktop actions */}
             <div className="nav-actions">
               <Link href="/signup" className="nav-btn signup">เปิดบัญชี</Link>
               <Link href="/login" className="nav-btn login">เข้าสู่ระบบ</Link>
             </div>
 
-            {/* toggle + hamburger สำหรับมือถือ */}
-            <input id="nav-toggle" type="checkbox" className="nav-toggle" />
+            {/* hamburger (มือถือ) */}
             <label htmlFor="nav-toggle" className="nav-burger" aria-label="เปิดเมนู">
               <span></span>
               <span></span>
@@ -317,7 +319,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </label>
           </div>
 
-          {/* เมนู mobile ดึง login / signup ออกมา */}
+          {/* เมนู mobile */}
           <div className="nav-mobile-menu">
             <div className="nav-mobile-inner">
               <Link href="/login" className="nav-mobile-link">เข้าสู่ระบบ</Link>
