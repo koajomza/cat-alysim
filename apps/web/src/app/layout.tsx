@@ -108,6 +108,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     border-bottom:1px solid var(--line);
     box-shadow: 0 10px 40px var(--shadow);
   }
+  .nav-inner {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
   .nav-left { display:flex; align-items:center; gap:14px; }
   .brand {
     display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.4px;
@@ -132,12 +135,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
   .nav-link:hover { border-color: var(--line); background: rgba(255,255,255,0.03); }
 
-  .nav-actions { display:flex; gap:10px; }
+  .nav-actions { display:flex; gap:10px; align-items:center; }
   .nav-btn {
     --glow: drop-shadow(0 0 12px rgba(0,208,132,0.32));
     padding:10px 14px; border-radius:12px; font-weight:600; line-height:1; border:1px solid var(--line);
     background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    filter: var(--glow);
+    filter: var(--glow); cursor:pointer;
   }
   .nav-btn.signup {
     background: radial-gradient(120% 140% at 10% -10%, rgba(0,208,132,0.5) 0%, rgba(0,208,132,0.14) 28%, rgba(255,255,255,0.03) 70%),
@@ -146,6 +149,74 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
   .nav-btn.signup:hover { transform: translateY(-0.5px); border-color: rgba(0,208,132,0.8); }
   .nav-btn.login:hover  { transform: translateY(-0.5px); border-color: var(--line); }
+
+  /* ===== Mobile menu toggle (hamburger) ===== */
+  .nav-toggle {
+    position:absolute;
+    width:1px; height:1px;
+    opacity:0; pointer-events:none;
+  }
+
+  .nav-burger {
+    display:none;
+    width:40px; height:32px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    padding:6px 8px;
+    cursor:pointer;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    flex-direction:column;
+  }
+  .nav-burger span {
+    width:100%;
+    height:2px;
+    border-radius:999px;
+    background:rgba(240,246,255,0.9);
+    transition:transform .18s ease, opacity .18s ease;
+  }
+
+  .nav-mobile-menu {
+    display:none;
+    border-top:1px solid var(--line);
+    background:rgba(8,12,15,0.96);
+    backdrop-filter: blur(12px);
+  }
+  .nav-mobile-inner {
+    max-width:1200px;
+    margin:0 auto;
+    padding:10px clamp(16px,3vw,28px) 14px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .nav-mobile-link {
+    padding:9px 12px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.04);
+    font-weight:500;
+  }
+  .nav-mobile-link.primary {
+    background: radial-gradient(130% 160% at 10% -10%, rgba(0,208,132,0.55) 0%, rgba(0,208,132,0.18) 30%, rgba(255,255,255,0.04) 70%);
+    border-color: rgba(0,208,132,0.6);
+  }
+
+  /* toggle effect */
+  .nav-toggle:checked ~ .nav-mobile-menu {
+    display:block;
+  }
+  .nav-toggle:checked + .nav-burger span:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .nav-toggle:checked + .nav-burger span:nth-child(2) {
+    opacity:0;
+  }
+  .nav-toggle:checked + .nav-burger span:nth-child(3) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
 
   /* ===== Footer ===== */
   .site-footer {
@@ -166,7 +237,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   /* ===== Responsive ===== */
   @media (max-width: 980px) {
-    .primary-links { display:none; }
+    .primary-links { display:none; }        /* ซ่อนเมนูฟีเจอร์/ดาวน์โหลด */
+  }
+
+  @media (max-width: 768px) {
+    .nav-actions { display:none; }         /* ซ่อนปุ่ม login/signup บนหัวแถบ */
+    .nav-burger { display:flex; }          /* โชว์ปุ่ม 3 ขีด */
+    .brand { padding-inline:10px; }
   }
 
   /* ===== Keyframes ===== */
@@ -211,7 +288,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* ===== Nav (glass + neon) ===== */}
         <a id="top" className="sr-only" aria-hidden="true" />
         <header className="nav">
-          <div className="container">
+          <div className="container nav-inner">
             <div className="nav-left">
               <Link href="/" className="brand" aria-label="กลับหน้าแรก">
                 <span className="brand-dot" />
@@ -224,9 +301,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/contact" className="nav-link">ติดต่อ</Link>
               </nav>
             </div>
+
+            {/* ปุ่ม login/signup สำหรับ desktop */}
             <div className="nav-actions">
               <Link href="/signup" className="nav-btn signup">เปิดบัญชี</Link>
               <Link href="/login" className="nav-btn login">เข้าสู่ระบบ</Link>
+            </div>
+
+            {/* toggle + hamburger สำหรับมือถือ */}
+            <input id="nav-toggle" type="checkbox" className="nav-toggle" />
+            <label htmlFor="nav-toggle" className="nav-burger" aria-label="เปิดเมนู">
+              <span></span>
+              <span></span>
+              <span></span>
+            </label>
+          </div>
+
+          {/* เมนู mobile ดึง login / signup ออกมา */}
+          <div className="nav-mobile-menu">
+            <div className="nav-mobile-inner">
+              <Link href="/login" className="nav-mobile-link">เข้าสู่ระบบ</Link>
+              <Link href="/signup" className="nav-mobile-link primary">สมัครสมาชิก</Link>
             </div>
           </div>
         </header>
