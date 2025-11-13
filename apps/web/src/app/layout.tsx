@@ -91,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   .site-main {
     position: relative;
     min-height: calc(100dvh - 88px - 64px);
-    padding: 24px clamp(16px, 3vw, 28px);
+    padding: 0px clamp(16px, 3vw, 28px);
   }
 
   .container {
@@ -152,7 +152,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   #nav-toggle {
     position:absolute;
     width:1px; height:1px;
-    opacity:0; pointer-events:none;
+    opacity:0;
+    pointer-events:none;
   }
 
   .nav-burger {
@@ -168,6 +169,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     gap:4px;
     flex-direction:column;
   }
+
+  /* ซ่อนปุ่มสามขีดตอนเมนูเปิด */
+  #nav-toggle:checked ~ .container .nav-burger {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .nav-burger span {
     width:100%;
     height:2px;
@@ -196,23 +204,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     background:rgba(255,255,255,0.03);
     border:1px solid rgba(255,255,255,0.04);
     font-weight:500;
+    cursor:pointer;
   }
   .nav-mobile-link.primary {
     background: radial-gradient(130% 160% at 10% -10%, rgba(0,208,132,0.55) 0%, rgba(0,208,132,0.18) 30%, rgba(255,255,255,0.04) 70%);
     border-color: rgba(0,208,132,0.6);
   }
+  .nav-mobile-sep {
+    height:1px;
+    margin:4px 0 6px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+  }
 
-  /* toggle effect: nav-toggle เป็น sibling ตัวแรกใน header
-     ใช้ ~ ไปหา .container และ .nav-mobile-menu */
-  #nav-toggle:checked ~ .container .nav-burger span:nth-child(1) {
-    transform: translateY(4px) rotate(45deg);
-  }
-  #nav-toggle:checked ~ .container .nav-burger span:nth-child(2) {
-    opacity:0;
-  }
-  #nav-toggle:checked ~ .container .nav-burger span:nth-child(3) {
-    transform: translateY(-4px) rotate(-45deg);
-  }
+  /* toggle effect */
   #nav-toggle:checked ~ .nav-mobile-menu {
     display:block;
   }
@@ -287,9 +291,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* ===== Nav ===== */}
         <header className="nav">
-          {/* checkbox ต้องอยู่เป็น child ตัวแรกใน header
-              เพื่อให้ selector #nav-toggle:checked ~ ... ทำงาน */}
-          <input id="nav-toggle" type="checkbox" className="" />
+          {/* checkbox toggle */}
+          <input id="nav-toggle" type="checkbox" />
 
           <div className="container nav-inner">
             <div className="nav-left">
@@ -319,11 +322,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </label>
           </div>
 
-          {/* เมนู mobile */}
+          {/* เมนู mobile: กดแล้วปิดเองเพราะ label ผูกกับ nav-toggle */}
           <div className="nav-mobile-menu">
             <div className="nav-mobile-inner">
-              <Link href="/login" className="nav-mobile-link">เข้าสู่ระบบ</Link>
-              <Link href="/signup" className="nav-mobile-link primary">สมัครสมาชิก</Link>
+              <label htmlFor="nav-toggle" className="nav-mobile-link">
+                <Link href="/#features">ฟีเจอร์</Link>
+              </label>
+              <label htmlFor="nav-toggle" className="nav-mobile-link">
+                <Link href="/#get">ดาวน์โหลด</Link>
+              </label>
+              <label htmlFor="nav-toggle" className="nav-mobile-link">
+                <Link href="/docs">คู่มือ</Link>
+              </label>
+              <label htmlFor="nav-toggle" className="nav-mobile-link">
+                <Link href="/contact">ติดต่อ</Link>
+              </label>
+
+              <div className="nav-mobile-sep" />
+
+              <label htmlFor="nav-toggle" className="nav-mobile-link">
+                <Link href="/login">เข้าสู่ระบบ</Link>
+              </label>
+              <label htmlFor="nav-toggle" className="nav-mobile-link primary">
+                <Link href="/signup">สมัครสมาชิก</Link>
+              </label>
             </div>
           </div>
         </header>

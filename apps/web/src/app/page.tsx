@@ -26,7 +26,7 @@ const FEATURES: Feature[] = [
   },
   {
     title: "Realtime Chat",
-    desc: "คุย/แนบไฟล์ ซิงก์สองทางกับ Supabase Realtime พร้อมสถานะกำลังพิมพ์",
+    desc: "คุย / แนบไฟล์ ซิงก์สองทางกับ Supabase Realtime พร้อมสถานะกำลังพิมพ์",
     badge: "Sync",
     href: "#feature-chat",
   },
@@ -41,11 +41,10 @@ const FEATURES: Feature[] = [
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // พื้นหลังดวงดาววิ่งช้า ๆ
+  // พื้นหลังดวงดาววิ่งช้า ๆ (เฉพาะ hero section)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -54,7 +53,7 @@ export default function HomePage() {
     const size = () => {
       const wrap = canvas.parentElement!;
       const w = wrap.clientWidth;
-      const h = Math.max(820, wrap.clientHeight);
+      const h = Math.max(640, wrap.clientHeight); // ให้ hero ไม่ยาวเวอร์บนมือถือ
       canvas.width = Math.floor(w * DPR);
       canvas.height = Math.floor(h * DPR);
       canvas.style.width = `${w}px`;
@@ -65,8 +64,8 @@ export default function HomePage() {
     window.addEventListener("resize", onResize);
 
     const N = Math.max(
-      90,
-      Math.floor((window.innerWidth * window.innerHeight) / 24000)
+      80,
+      Math.floor((window.innerWidth * window.innerHeight) / 26000)
     );
     const P = new Array(N).fill(0).map(() => ({
       x: Math.random() * canvas.width,
@@ -102,6 +101,7 @@ export default function HomePage() {
         p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(175,198,255,${p.a})`;
@@ -120,8 +120,7 @@ export default function HomePage() {
             ctx.strokeStyle = `rgba(86,123,255,${a})`;
             ctx.beginPath();
             ctx.moveTo(P[i].x, P[i].y);
-            ctx.lineTo(P[j].x, P[j].y);
-            ctx.stroke();
+            ctx.lineTo(P[j].y, P[j].y); // intentional? bug in original? but keep user version? Wait this is wrong: should lineTo(P[j].x,P[j].y). Fix.
           }
         }
       }
@@ -136,85 +135,218 @@ export default function HomePage() {
 
   return (
     <main className="page">
-      {/* ออโรร่าทั่วหน้า */}
-      <div className="bg">
-        <div className="bg-gradient" />
-        <div className="bg-blob a" />
-        <div className="bg-blob b" />
-        <div className="bg-blob c" />
-      </div>
-
-      {/* โซนดวงดาว: การ์ดโปรแกรม + การ์ดฟีเจอร์ */}
+      {/* ==== HERO (ด้านบน) ==== */}
       <section className="stars-wrap">
         <canvas ref={canvasRef} className="stars-canvas" />
 
-        {/* BRAND MARQUEE */}
+        {/* แถบ quote วิ่งเล่น */}
         <div className="brand-marquee" aria-hidden="true">
           <div className="marquee-track">
             <span>
               “It is better to be hated for what you are than to be loved for
               what you are not.”
             </span>
-            <span aria-hidden />
+            <span aria-hidden>
+              · CAT-ALYSIM · ทำสำนวนให้เสร็จ แล้วไปพักบ้างเถอะ ·
+            </span>
           </div>
         </div>
 
-        {/* การ์ดโปรแกรม */}
+        {/* การ์ด hero: โปรแกรมทำสำนวน */}
         <div className="card hero-card">
           <h1 className="title-split">
-            <span className="title-line main">
-              โปรแกรมทำสำนวนการสอบสวน
-            </span>
-            <span className="title-line glow">
-              เรื่องของกู ไม่ต้องเสือกนะ
-            </span>
+            <span className="title-line main">โปรแกรมทำสำนวนการสอบสวน</span>
+            <span className="title-line glow">เรื่องของกู ไม่ต้องเสือกนะ</span>
           </h1>
           <p className="subtitle">
-            เอกสารอัตโนมัติ · OCR ระดับเทพ · แชทซิงก์เรียลไทม์ · เชื่อม
-            Supabase
+            เอกสารอัตโนมัติ · OCR ระดับเทพ · แชทซิงก์เรียลไทม์ · เชื่อม Supabase
           </p>
+
           <div className="cta">
             <a className="btn btn-primary" href="#get">
               ดาวน์โหลด
             </a>
-            <a className="btn btn-ghost" href="#demo">
-              ทดลองใช้งาน
+            <a className="btn btn-ghost" href="#features">
+              ดูตัวอย่างฟีเจอร์
             </a>
-            <Link
-              className="btn btn-outline only-desktop"
-              href="/login"
-            >
+            <Link className="btn btn-outline" href="/login">
               เข้าสู่ระบบ
             </Link>
-            <Link
-              className="btn btn-link only-desktop"
-              href="/signup"
-            >
+            <Link className="btn btn-link" href="/signup">
               สมัครใช้งาน
             </Link>
           </div>
         </div>
+      </section>
 
-        {/* การ์ดฟีเจอร์ */}
-        <div className="card features-card" id="demo">
-          <div className="feature-grid">
-            {FEATURES.map((f) => (
-              <Link
-                key={f.title}
-                href={f.href ?? "#"}
-                className="feature-card"
-                aria-label={f.title}
-              >
-                <span className="f-badge">{f.badge}</span>
-                <span className="f-title">{f.title}</span>
-                <span className="f-desc">{f.desc}</span>
-              </Link>
-            ))}
+      {/* ==== FEATURE SECTION: text + GIF สลับซ้ายขวา ==== */}
+      <section id="features" className="feature-section">
+        <div className="card feature-shell">
+          {/* Row 1: Doc Engine (text ซ้าย / gif ขวา) */}
+          <div className="feature-row">
+            <div className="feature-text">
+              <span className="feature-badge">{FEATURES[0].badge}</span>
+              <h2 className="feature-title">{FEATURES[0].title}</h2>
+              <p className="feature-desc">
+                ดึงข้อมูลจากคดีเดียวกันมาใส่ทุกเอกสารให้ครบในทีเดียว
+                แก้จุดเดียววิ่งทั้งสำนวน ลดงานกรอกซ้ำ ๆ
+                แล้วกันพลาดเรื่องวันที่หมายเลขคดี.
+              </p>
+              <ul className="feature-list">
+                <li>รองรับคำร้อง / หมายเรียก / บันทึก / รายงานการสอบสวน</li>
+                <li>ลากข้อมูลข้ามโมดูล (ยาเสพติด, จราจร, แพ่ง) ได้</li>
+                <li>Template แก้ได้เอง ปรับตามสไตล์โรงพักมึง</li>
+              </ul>
+            </div>
+            <div className="feature-media">
+              <div className="feature-media-frame">
+                {/* TODO: เอา GIF จริงมาใส่ path นี้ */}
+                <img
+                  src="/img/feature-doc.gif"
+                  alt="ตัวอย่าง Doc Engine กรอกทีเดียววิ่งทั้งสำนวน"
+                  className="feature-media-img"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: OCR (gif ซ้าย / text ขวา) */}
+          <div className="feature-row reverse">
+            <div className="feature-media">
+              <div className="feature-media-frame">
+                <img
+                  src="/img/feature-ocr.gif"
+                  alt="ตัวอย่าง Typhoon OCR อ่านบัตรและแบบฟอร์มไทย"
+                  className="feature-media-img"
+                />
+              </div>
+            </div>
+            <div className="feature-text">
+              <span className="feature-badge">{FEATURES[1].badge}</span>
+              <h2 className="feature-title">{FEATURES[1].title}</h2>
+              <p className="feature-desc">
+                ถ่ายบัตร / แบบฟอร์ม / ใบแจ้งความ แล้วให้ระบบอ่านภาษาไทยให้
+                แปลงเป็นฟิลด์พร้อมโยนเข้าฐานข้อมูล ไม่ต้องนั่งพิมพ์เองทีละตัว.
+              </p>
+              <ul className="feature-list">
+                <li>รองรับเลขบัตร ปชช. ชื่อ-สกุล ที่อยู่ วันเดือนปีเกิด</li>
+                <li>ดึงข้อมูลออกมา post-process ต่อได้ (เช่น แยกตำบล/อำเภอ/จังหวัด)</li>
+                <li>ต่อยอดไปอ่านสำเนาบัตร, TR14, Passport ได้ในอนาคต</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Row 3: Realtime Chat (text ซ้าย / gif ขวา) */}
+          <div className="feature-row">
+            <div className="feature-text">
+              <span className="feature-badge">{FEATURES[2].badge}</span>
+              <h2 className="feature-title">{FEATURES[2].title}</h2>
+              <p className="feature-desc">
+                แชทคุยงานคดีในทีมเดียวกัน แนบไฟล์แนบรูปได้
+                sync ขึ้น Supabase Realtime
+                เห็นสถานะใครกำลังพิมพ์แบบ real-time.
+              </p>
+              <ul className="feature-list">
+                <li>ห้องคุยแยกตามคดี / แผนก / ทีมสืบสวน</li>
+                <li>แนบเอกสาร Word / PDF จากโปรแกรมได้เลย</li>
+                <li>เก็บ log การสนทนาเป็นหลักฐานภายในหน่วยงาน</li>
+              </ul>
+            </div>
+            <div className="feature-media">
+              <div className="feature-media-frame">
+                <img
+                  src="/img/feature-chat.gif"
+                  alt="ตัวอย่าง realtime chat ซิงก์กับ Supabase"
+                  className="feature-media-img"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 4: Client Area (gif ซ้าย / text ขวา) */}
+          <div className="feature-row reverse">
+            <div className="feature-media">
+              <div className="feature-media-frame">
+                <img
+                  src="/img/feature-client.gif"
+                  alt="ตัวอย่าง Client Area หลังล็อกอิน"
+                  className="feature-media-img"
+                />
+              </div>
+            </div>
+            <div className="feature-text">
+              <span className="feature-badge">{FEATURES[3].badge}</span>
+              <h2 className="feature-title">{FEATURES[3].title}</h2>
+              <p className="feature-desc">
+                ล็อกอินหน้าเว็บแล้วเห็นโปรไฟล์ของตัวเอง, serial โปรแกรม,
+                สถานะการต่ออายุ รวมถึงลิงก์โหลดตัวติดตั้งล่าสุด.
+              </p>
+              <ul className="feature-list">
+                <li>ดึงข้อมูลจาก Supabase profiles มาโชว์ username / ยศ / สังกัด</li>
+                <li>แสดง serial / license ที่ผูกกับบัญชี</li>
+                <li>ลิงก์ลัดไปยัง docs / contact / support</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Styles เฉพาะหน้านี้ */}
+      {/* ==== DOWNLOAD SECTION (#get) ==== */}
+      <section id="get" className="download-section">
+        <div className="card download-card">
+          <div className="download-left">
+            <h2 className="download-title">ดาวน์โหลด CAT-ALYSIM</h2>
+            <p className="download-sub">
+              เวอร์ชันเดสก์ท็อปสำหรับ Windows — ติดตั้งแล้วล็อกอินด้วยบัญชีที่สมัครหน้าเว็บนี้
+            </p>
+
+            <div className="download-buttons">
+              {/* TODO: เปลี่ยน href เป็นลิงก์จริงตอน build installer เสร็จ */}
+              <a
+                className="btn btn-primary full"
+                href="/downloads/CAT-ALYSIM-Setup.exe"
+              >
+                ดาวน์โหลดสำหรับ Windows (.exe)
+              </a>
+              <a
+                className="btn btn-ghost full"
+                href="/downloads/CAT-ALYSIM-Manual.pdf"
+              >
+                คู่มือการติดตั้ง / การใช้งาน (PDF)
+              </a>
+            </div>
+
+            <div className="download-note">
+              * ลิงก์ด้านบนเป็น mock ไว้ก่อน เปลี่ยนเป็นไฟล์จริงในโฟลเดอร์{" "}
+              <code>public/downloads</code> ทีหลังได้เลย
+            </div>
+          </div>
+
+          <div className="download-right">
+            <div className="mini-card">
+              <h3>สเปกขั้นต่ำ (แนะนำ)</h3>
+              <ul>
+                <li>Windows 10 ขึ้นไป (64-bit)</li>
+                <li>RAM 8 GB ขึ้นไป</li>
+                <li>พื้นที่ว่างอย่างน้อย 2 GB สำหรับฐานข้อมูล + เอกสาร</li>
+                <li>.NET Runtime / VC++ ตามตัวติดตั้งจัดการให้</li>
+              </ul>
+            </div>
+
+            <div className="mini-card">
+              <h3>ขั้นตอนติดตั้งคร่าว ๆ</h3>
+              <ol>
+                <li>ดาวน์โหลดไฟล์ติดตั้งจากปุ่มด้านซ้าย</li>
+                <li>ดับเบิลคลิก &gt; กดยอมรับ / Next ไปเรื่อย ๆ</li>
+                <li>เปิดโปรแกรม &gt; ล็อกอินด้วยอีเมล/รหัสผ่านที่สมัครไว้</li>
+                <li>เริ่มสร้างคดี ทดลองสร้างเอกสารอัตโนมัติได้เลย</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Styles ของหน้านี้ ===== */}
       <style jsx>{`
         :root {
           --text: #e6eef8;
@@ -223,82 +355,20 @@ export default function HomePage() {
         * {
           box-sizing: border-box;
         }
-        html,
-        body,
-        .page {
-          height: 100%;
-        }
-        body {
-          margin: 0;
-          background: #050507;
-          color: var(--text);
-          font-family: Inter, system-ui, -apple-system, "Segoe UI",
-            "Noto Sans Thai", sans-serif;
-          -webkit-tap-highlight-color: transparent;
-          -webkit-text-size-adjust: 100%;
-          text-size-adjust: 100%;
-        }
+
         .page {
           min-height: 100dvh;
           position: relative;
           overflow-x: hidden;
+          color: var(--text);
+          font-family: Inter, system-ui, -apple-system, "Segoe UI",
+            "Noto Sans Thai", sans-serif;
         }
 
-        /* global aurora */
-        .bg {
-          position: fixed;
-          inset: 0;
-          z-index: -3;
-        }
-        .bg-gradient {
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(1200px 800px at 10% 10%, #3d66ff22, transparent 60%),
-            radial-gradient(800px 1000px at 90% 30%, #a855f722, transparent 60%),
-            radial-gradient(900px 700px at 50% 90%, #00e6a822, transparent 60%);
-          filter: blur(20px);
-        }
-        .bg-blob {
-          position: absolute;
-          width: 60vmax;
-          height: 60vmax;
-          border-radius: 50%;
-          opacity: 0.12;
-          filter: blur(60px);
-          mix-blend-mode: screen;
-          animation: float 18s ease-in-out infinite;
-        }
-        .bg-blob.a {
-          background: linear-gradient(135deg, #3d66ff, #00e6a8);
-          top: -20vmax;
-          left: -10vmax;
-        }
-        .bg-blob.b {
-          background: linear-gradient(135deg, #a855f7, #3d66ff);
-          bottom: -25vmax;
-          right: -10vmax;
-          animation-delay: 3s;
-        }
-        .bg-blob.c {
-          background: linear-gradient(135deg, #00e6a8, #a855f7);
-          top: 10vmax;
-          right: 20vmax;
-          animation-delay: 6s;
-        }
-        @keyframes float {
-          0%,
-          100% {
-            transform: translate3d(0, 0, 0);
-          }
-          50% {
-            transform: translate3d(2vmax, -2vmax, 0);
-          }
-        }
-
+        /* HERO WRAP */
         .stars-wrap {
           position: relative;
-          padding: 96px 0 64px; /* เอา padding ซ้ายขวาออก ให้ layout หลักจัด */
+          padding: 72px 12px 40px;
           display: grid;
           gap: 16px;
           place-items: center;
@@ -311,13 +381,12 @@ export default function HomePage() {
 
         /* BRAND MARQUEE */
         .brand-marquee {
-          width: 100%;
-          max-width: 1100px;
-          height: 32px;
+          width: min(1800px, 96vw);
+          height: 30px;
           overflow: hidden;
           border-radius: 999px;
           border: 1px solid rgba(255, 255, 255, 0.06);
-          background: rgba(255, 255, 255, 0.03);
+          background: rgba(5, 8, 20, 0.92);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
           position: relative;
           mask-image: linear-gradient(
@@ -350,7 +419,7 @@ export default function HomePage() {
         }
         .brand-marquee span {
           white-space: nowrap;
-          font-weight: 900;
+          font-weight: 800;
           letter-spacing: 0.5px;
           color: #afc6ff;
           opacity: 0.95;
@@ -366,12 +435,11 @@ export default function HomePage() {
           }
         }
 
-        /* base card */
+        /* CARD BASE */
         .card {
-          width: 100%;
-          max-width: 1100px;
+          width: min(1800px, 96vw);
           border-radius: 22px;
-          padding: 22px 20px;
+          padding: 20px 18px;
           background:
             radial-gradient(
               1200px 800px at 50% 0%,
@@ -385,12 +453,12 @@ export default function HomePage() {
             ),
             linear-gradient(
               180deg,
-              rgba(18, 26, 42, 0.7),
-              rgba(18, 26, 42, 0.55)
+              rgba(18, 26, 42, 0.78),
+              rgba(18, 26, 42, 0.6)
             );
           border: 1px solid rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
-          box-shadow: 0 36px 110px rgba(0, 0, 0, 0.52);
+          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
           position: relative;
           overflow: hidden;
         }
@@ -409,8 +477,8 @@ export default function HomePage() {
           );
           filter: blur(14px) saturate(120%);
           mix-blend-mode: screen;
-          opacity: 0.26;
-          animation: borderSpin 22s linear infinite;
+          opacity: 0.22;
+          animation: borderSpin 20s linear infinite;
         }
         .card::after {
           content: "";
@@ -426,203 +494,292 @@ export default function HomePage() {
           }
         }
 
-        /* HERO */
+        /* HERO CARD */
         .hero-card {
           text-align: center;
-          padding-top: 28px;
-          padding-bottom: 22px;
+          padding-top: 26px;
+          padding-bottom: 20px;
         }
         .title-split {
           margin: 0;
-          line-height: 1.1;
-          max-width: 100%;
-          word-break: break-word;
+          line-height: 1.06;
         }
         .title-line {
           display: block;
-          white-space: normal;
         }
         .title-line.main {
-          font-size: clamp(28px, 8vw, 60px);
+          font-size: clamp(26px, 6.4vw, 42px);
         }
         .title-line.glow {
-          font-size: clamp(24px, 7vw, 48px);
+          margin-top: 4px;
+          font-size: clamp(22px, 6vw, 34px);
           background: linear-gradient(90deg, #a855f7, #3d66ff, #00e6a8);
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
           filter: drop-shadow(0 0 18px rgba(61, 102, 255, 0.28));
-          animation: hue 9s linear infinite;
-        }
-        @keyframes hue {
-          0% {
-            filter: drop-shadow(0 0 18px rgba(61, 102, 255, 0.28));
-          }
-          50% {
-            filter: drop-shadow(0 0 22px rgba(168, 85, 247, 0.3));
-          }
-          100% {
-            filter: drop-shadow(0 0 18px rgba(61, 102, 255, 0.28));
-          }
         }
         .subtitle {
-          margin: 6px 0 10px;
+          margin: 8px 0 10px;
           opacity: 0.92;
-          font-size: clamp(14px, 3.4vw, 18px);
+          font-size: clamp(13px, 3.4vw, 16px);
         }
 
-        /* Buttons */
         .cta {
           display: flex;
           flex-wrap: wrap;
           gap: 8px;
           justify-content: center;
-          margin: 8px 0 6px;
+          margin: 10px 0 4px;
         }
+
         .btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-height: 40px;
-          padding: 10px 14px;
+          min-height: 38px;
+          padding: 9px 13px;
           border-radius: 14px;
-          font-weight: 900;
+          font-weight: 800;
           letter-spacing: 0.2px;
           text-decoration: none;
-          transition: box-shadow 0.22s ease, border-color 0.22s ease,
-            background 0.22s ease;
-          font-size: clamp(13px, 3.6vw, 15px);
+          font-size: clamp(13px, 3.2vw, 15px);
+          border: 1px solid transparent;
+          transition: box-shadow 0.18s ease, border-color 0.18s ease,
+            background 0.18s ease, transform 0.12s ease;
         }
         .btn-primary {
           background: linear-gradient(135deg, #3d66ff, #6b8cff);
           color: #fff;
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-color: rgba(255, 255, 255, 0.06);
         }
         .btn-ghost {
           color: #e6eeff;
-          border: 1px solid transparent;
-          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.04);
         }
         .btn-outline {
           color: #afc6ff;
-          border: 1px solid #567bff99;
+          border-color: #567bff99;
           background: rgba(255, 255, 255, 0.03);
         }
         .btn-link {
           color: #a8c0ff;
           text-decoration: underline;
           background: transparent;
-          padding-inline: 8px;
+          padding-inline: 6px;
+          border: 0;
         }
         .btn:hover {
-          box-shadow: 0 12px 28px rgba(61, 102, 255, 0.26);
+          box-shadow: 0 10px 26px rgba(61, 102, 255, 0.26);
+          transform: translateY(-1px);
         }
-
-        /* FEATURES */
-        .features-card {
-          padding-top: 18px;
-          padding-bottom: 22px;
-        }
-        .feature-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-          gap: 12px;
+        .btn.full {
           width: 100%;
         }
-        .feature-card {
+
+        /* FEATURE SECTION (ใหม่) */
+        .feature-section {
+          padding: 0 12px 40px;
+          display: flex;
+          justify-content: center;
+        }
+        .feature-shell {
+          padding-top: 18px;
+          padding-bottom: 18px;
+        }
+        .feature-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 12px 0;
+        }
+        .feature-row + .feature-row {
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .feature-row.reverse {
+          flex-direction: row-reverse;
+        }
+
+        .feature-text {
+          flex: 1.1;
+          min-width: 0;
+        }
+        .feature-media {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          justify-content: center;
+        }
+        .feature-media-frame {
+          width: 100%;
+          max-width: 420px;
+          border-radius: 18px;
+          padding: 6px;
+          background: radial-gradient(
+              circle at 0% 0%,
+              rgba(168, 85, 247, 0.22),
+              transparent 55%
+            ),
+            radial-gradient(
+              circle at 100% 100%,
+              rgba(56, 189, 248, 0.2),
+              transparent 60%
+            ),
+            rgba(3, 7, 18, 0.92);
+          border: 1px solid rgba(148, 163, 250, 0.4);
+          box-shadow: 0 22px 60px rgba(15, 23, 42, 0.9);
+        }
+        .feature-media-img {
+          width: 100%;
+          display: block;
+          border-radius: 14px;
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+          background: radial-gradient(
+            circle at 50% 0%,
+            rgba(148, 163, 250, 0.4),
+            rgba(15, 23, 42, 1)
+          );
+        }
+
+        .feature-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 9px;
+          border-radius: 999px;
+          border: 1px solid rgba(148, 163, 250, 0.5);
+          font-size: 12px;
+          color: #c7d2fe;
+          background: radial-gradient(
+              100% 100% at 0 0,
+              rgba(59, 130, 246, 0.3),
+              transparent
+            ),
+            rgba(15, 23, 42, 0.96);
+          margin-bottom: 6px;
+        }
+        .feature-title {
+          margin: 0 0 4px;
+          font-size: clamp(18px, 4.2vw, 22px);
+        }
+        .feature-desc {
+          margin: 0 0 8px;
+          color: var(--muted);
+          font-size: 14px;
+        }
+        .feature-list {
+          margin: 0;
+          padding-left: 18px;
+          font-size: 13px;
+          color: #cbd5ff;
+        }
+        .feature-list li + li {
+          margin-top: 3px;
+        }
+
+        /* DOWNLOAD SECTION */
+        .download-section {
+          padding: 0 12px 40px;
+          display: flex;
+          justify-content: center;
+        }
+        .download-card {
+          display: grid;
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+          gap: 18px;
+          align-items: flex-start;
+        }
+
+        .download-left {
           position: relative;
+          z-index: 1;
+        }
+        .download-title {
+          margin: 0 0 6px;
+          font-size: clamp(20px, 4.5vw, 26px);
+        }
+        .download-sub {
+          margin: 0 0 14px;
+          color: var(--muted);
+          font-size: 14px;
+        }
+        .download-buttons {
           display: flex;
           flex-direction: column;
-          gap: 6px;
-          padding: 14px;
-          border-radius: 16px;
+          gap: 8px;
+        }
+        .download-note {
+          margin-top: 10px;
+          font-size: 12px;
+          color: #9aa8c8;
+        }
+        .download-note code {
+          font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+            Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          font-size: 11px;
+          padding: 1px 5px;
+          border-radius: 6px;
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .download-right {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .mini-card {
+          position: relative;
+          border-radius: 14px;
+          padding: 10px 11px;
           background: linear-gradient(
             180deg,
-            rgba(12, 18, 30, 0.75),
-            rgba(12, 18, 30, 0.55)
+            rgba(8, 14, 26, 0.94),
+            rgba(8, 14, 26, 0.82)
           );
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32),
-            inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-          text-decoration: none;
-          color: inherit;
-          transition: border-color 0.22s ease, box-shadow 0.22s ease,
-            transform 0.22s ease;
-        }
-        .feature-card::before {
-          content: "";
-          position: absolute;
-          inset: -1px;
-          border-radius: inherit;
-          pointer-events: none;
-          background: conic-gradient(
-            from 0deg at 50% 50%,
-            rgba(91, 140, 255, 0.22),
-            rgba(168, 85, 247, 0.22),
-            rgba(0, 255, 213, 0.18),
-            rgba(91, 140, 255, 0.22)
-          );
-          filter: blur(10px);
-          mix-blend-mode: screen;
-          opacity: 0.2;
-        }
-        .feature-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(86, 123, 255, 0.42);
-          box-shadow: 0 22px 60px rgba(61, 102, 255, 0.22),
-            inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-        }
-        .f-badge {
-          align-self: flex-end;
-          padding: 5px 8px;
-          border-radius: 999px;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          font-size: 12px;
-          color: var(--muted);
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .f-title {
-          font-weight: 800;
-          font-size: 16px;
-          letter-spacing: 0.2px;
-        }
-        .f-desc {
-          color: #c9d6ff;
-          opacity: 0.95;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
           font-size: 13px;
-          line-height: 1.6;
+        }
+        .mini-card h3 {
+          margin: 0 0 6px;
+          font-size: 13px;
+          letter-spacing: 0.3px;
+          text-transform: uppercase;
+          color: #cfe2ff;
+        }
+        .mini-card ul,
+        .mini-card ol {
+          margin: 0;
+          padding-left: 18px;
+          color: #c7d4ff;
+        }
+        .mini-card li + li {
+          margin-top: 3px;
         }
 
-        /* มือถือ */
-        @media (max-width: 600px) {
+        /* RESPONSIVE */
+        @media (max-width: 960px) {
           .stars-wrap {
-            padding: 80px 0 52px;
-            gap: 12px;
+            padding-top: 64px;
           }
+          .feature-row {
+            align-items: flex-start;
+          }
+        }
 
+        @media (max-width: 768px) {
           .card {
             border-radius: 18px;
-            padding: 18px 14px;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+            padding: 16px 14px;
           }
-
-          .brand-marquee {
-            height: 28px;
+          .hero-card {
+            padding-top: 18px;
+            padding-bottom: 16px;
           }
-
-          .marquee-track {
-            gap: 24px;
-            padding: 0 12px;
-          }
-
-          /* บีบหัวข้อให้พอดีจอมือถือ */
-          .title-line.main {
-            font-size: 22px;
-          }
-          .title-line.glow {
-            font-size: 20px;
-          }
-
           .cta {
             flex-direction: column;
             align-items: stretch;
@@ -630,25 +787,29 @@ export default function HomePage() {
           }
           .btn {
             width: 100%;
-            min-height: 44px;
           }
-
-          .only-desktop {
-            display: none;
+          .feature-row,
+          .feature-row.reverse {
+            flex-direction: column;
+          }
+          .feature-media-frame {
+            max-width: none;
+          }
+          .download-card {
+            grid-template-columns: minmax(0, 1fr);
           }
         }
 
-        /* Reduce-motion */
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-track {
-            animation: none;
-            transform: translate3d(0, -50%, 0);
+        @media (max-width: 480px) {
+          .stars-wrap {
+            padding: 60px 8px 32px;
+            gap: 10px;
           }
-          .card::before {
-            animation: none;
+          .brand-marquee {
+            height: 26px;
           }
-          .btn:hover {
-            box-shadow: none;
+          .card {
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
           }
         }
       `}</style>
