@@ -45,6 +45,7 @@ export default function HomePage() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -63,7 +64,10 @@ export default function HomePage() {
     const onResize = () => size();
     window.addEventListener("resize", onResize);
 
-    const N = Math.max(90, Math.floor((window.innerWidth * window.innerHeight) / 24000));
+    const N = Math.max(
+      90,
+      Math.floor((window.innerWidth * window.innerHeight) / 24000)
+    );
     const P = new Array(N).fill(0).map(() => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -76,11 +80,18 @@ export default function HomePage() {
     let raf = 0;
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      const w = canvas.width,
-        h = canvas.height;
+      const w = canvas.width;
+      const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
 
-      const g = ctx.createRadialGradient(w * 0.5, h * 0.5, h * 0.1, w * 0.5, h * 0.5, h * 0.95);
+      const g = ctx.createRadialGradient(
+        w * 0.5,
+        h * 0.5,
+        h * 0.1,
+        w * 0.5,
+        h * 0.5,
+        h * 0.95
+      );
       g.addColorStop(0, "rgba(61,102,255,0.08)");
       g.addColorStop(1, "rgba(255,255,255,0.02)");
       ctx.fillStyle = g;
@@ -101,8 +112,8 @@ export default function HomePage() {
       const R = 130 * DPR;
       for (let i = 0; i < P.length; i++) {
         for (let j = i + 1; j < P.length; j++) {
-          const dx = P[i].x - P[j].x,
-            dy = P[i].y - P[j].y;
+          const dx = P[i].x - P[j].x;
+          const dy = P[i].y - P[j].y;
           const d2 = dx * dx + dy * dy;
           if (d2 < R * R) {
             const a = 0.05 * (1 - d2 / (R * R));
@@ -125,7 +136,7 @@ export default function HomePage() {
 
   return (
     <main className="page">
-      {/* ออโรร่าทั่วหน้า (เพิ่มจาก background หลักให้ฟีล homepage พิเศษขึ้น) */}
+      {/* ออโรร่าทั่วหน้า */}
       <div className="bg">
         <div className="bg-gradient" />
         <div className="bg-blob a" />
@@ -141,20 +152,26 @@ export default function HomePage() {
         <div className="brand-marquee" aria-hidden="true">
           <div className="marquee-track">
             <span>
-              “It is better to be hated for what you are than to be loved for what you are not.”
+              “It is better to be hated for what you are than to be loved for
+              what you are not.”
             </span>
-            <span aria-hidden></span>
+            <span aria-hidden />
           </div>
         </div>
 
-        {/* การ์ด hero */}
+        {/* การ์ดโปรแกรม */}
         <div className="card hero-card">
           <h1 className="title-split">
-            <span className="title-line main">โปรแกรมทำสำนวนการสอบสวน</span>
-            <span className="title-line glow">เรื่องของกู ไม่ต้องเสือกนะ</span>
+            <span className="title-line main">
+              โปรแกรมทำสำนวนการสอบสวน
+            </span>
+            <span className="title-line glow">
+              เรื่องของกู ไม่ต้องเสือกนะ
+            </span>
           </h1>
           <p className="subtitle">
-            เอกสารอัตโนมัติ · OCR ระดับเทพ · แชทซิงก์เรียลไทม์ · เชื่อม Supabase
+            เอกสารอัตโนมัติ · OCR ระดับเทพ · แชทซิงก์เรียลไทม์ · เชื่อม
+            Supabase
           </p>
           <div className="cta">
             <a className="btn btn-primary" href="#get">
@@ -163,11 +180,16 @@ export default function HomePage() {
             <a className="btn btn-ghost" href="#demo">
               ทดลองใช้งาน
             </a>
-            {/* ปุ่ม login/signup แสดงเฉพาะจอใหญ่ — จอเล็กไปใช้เมนู 3 ขีดแทน */}
-            <Link className="btn btn-outline only-desktop" href="/login">
+            <Link
+              className="btn btn-outline only-desktop"
+              href="/login"
+            >
               เข้าสู่ระบบ
             </Link>
-            <Link className="btn btn-link only-desktop" href="/signup">
+            <Link
+              className="btn btn-link only-desktop"
+              href="/signup"
+            >
               สมัครใช้งาน
             </Link>
           </div>
@@ -177,7 +199,12 @@ export default function HomePage() {
         <div className="card features-card" id="demo">
           <div className="feature-grid">
             {FEATURES.map((f) => (
-              <Link key={f.title} href={f.href ?? "#"} className="feature-card" aria-label={f.title}>
+              <Link
+                key={f.title}
+                href={f.href ?? "#"}
+                className="feature-card"
+                aria-label={f.title}
+              >
                 <span className="f-badge">{f.badge}</span>
                 <span className="f-title">{f.title}</span>
                 <span className="f-desc">{f.desc}</span>
@@ -187,23 +214,41 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Styles เฉพาะหน้านี้ */}
       <style jsx>{`
+        :root {
+          --text: #e6eef8;
+          --muted: #a9b6d6;
+        }
         * {
           box-sizing: border-box;
         }
-
+        html,
+        body,
+        .page {
+          height: 100%;
+        }
+        body {
+          margin: 0;
+          background: #050507;
+          color: var(--text);
+          font-family: Inter, system-ui, -apple-system, "Segoe UI",
+            "Noto Sans Thai", sans-serif;
+          -webkit-tap-highlight-color: transparent;
+          -webkit-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+        }
         .page {
           min-height: 100dvh;
           position: relative;
           overflow-x: hidden;
         }
 
-        /* extra aurora เฉพาะหน้า home */
+        /* global aurora */
         .bg {
           position: fixed;
           inset: 0;
           z-index: -3;
-          pointer-events: none;
         }
         .bg-gradient {
           position: absolute;
@@ -253,7 +298,7 @@ export default function HomePage() {
 
         .stars-wrap {
           position: relative;
-          padding: 96px 14px 64px;
+          padding: 96px 0 64px; /* เอา padding ซ้ายขวาออก ให้ layout หลักจัด */
           display: grid;
           gap: 16px;
           place-items: center;
@@ -264,9 +309,10 @@ export default function HomePage() {
           z-index: -1;
         }
 
-        /* marquee cat quote */
+        /* BRAND MARQUEE */
         .brand-marquee {
-          width: min(1800px, 96vw);
+          width: 100%;
+          max-width: 1100px;
           height: 32px;
           overflow: hidden;
           border-radius: 999px;
@@ -320,14 +366,28 @@ export default function HomePage() {
           }
         }
 
+        /* base card */
         .card {
-          width: min(1800px, 96vw);
+          width: 100%;
+          max-width: 1100px;
           border-radius: 22px;
           padding: 22px 20px;
           background:
-            radial-gradient(1200px 800px at 50% 0%, rgba(168, 85, 247, 0.12), transparent 60%),
-            radial-gradient(900px 600px at 50% 100%, rgba(93, 180, 255, 0.14), transparent 60%),
-            linear-gradient(180deg, rgba(18, 26, 42, 0.7), rgba(18, 26, 42, 0.55));
+            radial-gradient(
+              1200px 800px at 50% 0%,
+              rgba(168, 85, 247, 0.12),
+              transparent 60%
+            ),
+            radial-gradient(
+              900px 600px at 50% 100%,
+              rgba(93, 180, 255, 0.14),
+              transparent 60%
+            ),
+            linear-gradient(
+              180deg,
+              rgba(18, 26, 42, 0.7),
+              rgba(18, 26, 42, 0.55)
+            );
           border: 1px solid rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           box-shadow: 0 36px 110px rgba(0, 0, 0, 0.52);
@@ -366,6 +426,7 @@ export default function HomePage() {
           }
         }
 
+        /* HERO */
         .hero-card {
           text-align: center;
           padding-top: 28px;
@@ -373,10 +434,13 @@ export default function HomePage() {
         }
         .title-split {
           margin: 0;
-          line-height: 1.06;
+          line-height: 1.1;
+          max-width: 100%;
+          word-break: break-word;
         }
         .title-line {
           display: block;
+          white-space: normal;
         }
         .title-line.main {
           font-size: clamp(28px, 8vw, 60px);
@@ -407,6 +471,7 @@ export default function HomePage() {
           font-size: clamp(14px, 3.4vw, 18px);
         }
 
+        /* Buttons */
         .cta {
           display: flex;
           flex-wrap: wrap;
@@ -424,23 +489,23 @@ export default function HomePage() {
           font-weight: 900;
           letter-spacing: 0.2px;
           text-decoration: none;
-          border: 1px solid transparent;
+          transition: box-shadow 0.22s ease, border-color 0.22s ease,
+            background 0.22s ease;
           font-size: clamp(13px, 3.6vw, 15px);
-          transition: box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
         }
         .btn-primary {
           background: linear-gradient(135deg, #3d66ff, #6b8cff);
           color: #fff;
-          border-color: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.06);
         }
         .btn-ghost {
           color: #e6eeff;
-          border-color: rgba(255, 255, 255, 0.12);
+          border: 1px solid transparent;
           background: rgba(255, 255, 255, 0.05);
         }
         .btn-outline {
           color: #afc6ff;
-          border-color: #567bff99;
+          border: 1px solid #567bff99;
           background: rgba(255, 255, 255, 0.03);
         }
         .btn-link {
@@ -453,6 +518,7 @@ export default function HomePage() {
           box-shadow: 0 12px 28px rgba(61, 102, 255, 0.26);
         }
 
+        /* FEATURES */
         .features-card {
           padding-top: 18px;
           padding-bottom: 22px;
@@ -470,16 +536,17 @@ export default function HomePage() {
           gap: 6px;
           padding: 14px;
           border-radius: 16px;
-          background: linear-gradient(180deg, rgba(12, 18, 30, 0.75), rgba(12, 18, 30, 0.55));
+          background: linear-gradient(
+            180deg,
+            rgba(12, 18, 30, 0.75),
+            rgba(12, 18, 30, 0.55)
+          );
           border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow:
-            0 16px 40px rgba(0, 0, 0, 0.32),
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32),
             inset 0 0 0 1px rgba(255, 255, 255, 0.02);
           text-decoration: none;
           color: inherit;
-          transition:
-            border-color 0.22s ease,
-            box-shadow 0.22s ease,
+          transition: border-color 0.22s ease, box-shadow 0.22s ease,
             transform 0.22s ease;
         }
         .feature-card::before {
@@ -502,8 +569,7 @@ export default function HomePage() {
         .feature-card:hover {
           transform: translateY(-4px);
           border-color: rgba(86, 123, 255, 0.42);
-          box-shadow:
-            0 22px 60px rgba(61, 102, 255, 0.22),
+          box-shadow: 0 22px 60px rgba(61, 102, 255, 0.22),
             inset 0 0 0 1px rgba(255, 255, 255, 0.03);
         }
         .f-badge {
@@ -512,7 +578,7 @@ export default function HomePage() {
           border-radius: 999px;
           border: 1px solid rgba(255, 255, 255, 0.12);
           font-size: 12px;
-          color: #a9b6d6;
+          color: var(--muted);
           background: rgba(255, 255, 255, 0.05);
         }
         .f-title {
@@ -527,26 +593,36 @@ export default function HomePage() {
           line-height: 1.6;
         }
 
-        /* ===== มือถือ ===== */
+        /* มือถือ */
         @media (max-width: 600px) {
           .stars-wrap {
-            padding: 80px 10px 52px;
+            padding: 80px 0 52px;
             gap: 12px;
           }
+
           .card {
             border-radius: 18px;
-            padding: 18px 16px;
+            padding: 18px 14px;
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
           }
+
           .brand-marquee {
             height: 28px;
           }
+
           .marquee-track {
             gap: 24px;
             padding: 0 12px;
           }
 
-          /* ปุ่ม full width และซ่อน login/signup ใน hero */
+          /* บีบหัวข้อให้พอดีจอมือถือ */
+          .title-line.main {
+            font-size: 22px;
+          }
+          .title-line.glow {
+            font-size: 20px;
+          }
+
           .cta {
             flex-direction: column;
             align-items: stretch;
@@ -556,11 +632,13 @@ export default function HomePage() {
             width: 100%;
             min-height: 44px;
           }
+
           .only-desktop {
             display: none;
           }
         }
 
+        /* Reduce-motion */
         @media (prefers-reduced-motion: reduce) {
           .marquee-track {
             animation: none;
