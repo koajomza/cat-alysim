@@ -120,7 +120,8 @@ export default function HomePage() {
             ctx.strokeStyle = `rgba(86,123,255,${a})`;
             ctx.beginPath();
             ctx.moveTo(P[i].x, P[i].y);
-            ctx.lineTo(P[j].y, P[j].y); // intentional? bug in original? but keep user version? Wait this is wrong: should lineTo(P[j].x,P[j].y). Fix.
+            ctx.lineTo(P[j].x, P[j].y); // fixed lineTo bug
+            ctx.stroke();
           }
         }
       }
@@ -369,9 +370,12 @@ export default function HomePage() {
         .stars-wrap {
           position: relative;
           padding: 72px 12px 40px;
-          display: grid;
+          display: flex;
+          flex-direction: column;
           gap: 16px;
-          place-items: center;
+          align-items: center;
+          justify-content: center;
+          min-height: calc(100dvh - 120px); /* ดัน hero ให้อยู่กลางจอ */
         }
         .stars-canvas {
           position: absolute;
@@ -578,7 +582,7 @@ export default function HomePage() {
           width: 100%;
         }
 
-        /* FEATURE SECTION (ใหม่) */
+        /* FEATURE SECTION */
         .feature-section {
           padding: 0 12px 40px;
           display: flex;
@@ -765,6 +769,7 @@ export default function HomePage() {
         @media (max-width: 960px) {
           .stars-wrap {
             padding-top: 64px;
+            min-height: calc(100dvh - 110px);
           }
           .feature-row {
             align-items: flex-start;
@@ -772,6 +777,10 @@ export default function HomePage() {
         }
 
         @media (max-width: 768px) {
+          .stars-wrap {
+            padding: 64px 10px 32px;
+            min-height: calc(100dvh - 110px);
+          }
           .card {
             border-radius: 18px;
             padding: 16px 14px;
@@ -802,8 +811,9 @@ export default function HomePage() {
 
         @media (max-width: 480px) {
           .stars-wrap {
-            padding: 60px 8px 32px;
+            padding: 56px 8px 28px;
             gap: 10px;
+            min-height: calc(100dvh - 100px);
           }
           .brand-marquee {
             height: 26px;

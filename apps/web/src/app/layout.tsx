@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Kanit } from "next/font/google";
+import NavAuth from "@/components/NavAuth";
 
 export const metadata: Metadata = {
   title: "CAT-ALYSIM",
@@ -148,6 +149,74 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   .nav-btn.signup:hover { transform: translateY(-0.5px); border-color: rgba(0,208,132,0.8); }
   .nav-btn.login:hover  { transform: translateY(-0.5px); border-color: var(--line); }
 
+  /* ===== User menu (desktop) ===== */
+  .nav-user {
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    flex:0 0 auto;
+  }
+  .nav-user-btn {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background: radial-gradient(120% 160% at 0% 0%, rgba(0,208,132,0.35) 0%, rgba(0,208,132,0.08) 32%, rgba(255,255,255,0.02) 72%);
+    cursor:pointer;
+    font-weight:500;
+    color:var(--text);
+  }
+  .nav-user-avatar {
+    width:26px; height:26px;
+    border-radius:999px;
+    display:grid; place-items:center;
+    font-size:14px; font-weight:700;
+    background: radial-gradient(circle at 30% 20%, #00d084, #009f62);
+    box-shadow:0 0 18px #00d08466;
+  }
+  .nav-user-name {
+    max-width:140px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    font-size:14px;
+  }
+  .nav-user-caret { font-size:11px; opacity:.75; }
+
+  .nav-user-menu {
+    position:absolute;
+    right:0;
+    margin-top:8px;
+    min-width:180px;
+    padding:6px;
+    border-radius:14px;
+    background:rgba(8,12,15,0.97);
+    border:1px solid var(--line);
+    box-shadow:0 14px 50px rgba(0,0,0,0.7);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    z-index:60;
+  }
+  .nav-user-item {
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:8px 10px;
+    border-radius:10px;
+    border:0;
+    background:transparent;
+    color:var(--text);
+    font-size:14px;
+    cursor:pointer;
+  }
+  .nav-user-item:hover {
+    background:rgba(255,255,255,0.04);
+  }
+
   /* ===== Mobile menu toggle (hamburger) ===== */
   #nav-toggle {
     position:absolute;
@@ -198,18 +267,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     flex-direction:column;
     gap:6px;
   }
+
   .nav-mobile-link {
+    display:block;
     padding:9px 12px;
     border-radius:10px;
     background:rgba(255,255,255,0.03);
     border:1px solid rgba(255,255,255,0.04);
     font-weight:500;
-    cursor:pointer;
   }
   .nav-mobile-link.primary {
     background: radial-gradient(130% 160% at 10% -10%, rgba(0,208,132,0.55) 0%, rgba(0,208,132,0.18) 30%, rgba(255,255,255,0.04) 70%);
     border-color: rgba(0,208,132,0.6);
   }
+
   .nav-mobile-sep {
     height:1px;
     margin:4px 0 6px;
@@ -245,6 +316,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   @media (max-width: 768px) {
     .nav-actions { display:none; }
+    .nav-user { display:none; }
     .nav-burger { display:flex; }
     .brand { padding-inline:10px; }
   }
@@ -301,18 +373,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 CAT-ALYSIM
               </Link>
               <nav className="primary-links" aria-label="เมนูหลัก">
-                <Link href="/#features" className="nav-link">ฟีเจอร์</Link>
-                <Link href="/#get" className="nav-link">ดาวน์โหลด</Link>
-                <Link href="/docs" className="nav-link">คู่มือ</Link>
-                <Link href="/contact" className="nav-link">ติดต่อ</Link>
+                <Link href="/#features" className="nav-link">
+                  ฟีเจอร์
+                </Link>
+                <Link href="/#get" className="nav-link">
+                  ดาวน์โหลด
+                </Link>
+                <Link href="/chat" className="nav-link">
+                  แชท
+                </Link>
+                <Link href="/docs" className="nav-link">
+                  คู่มือ
+                </Link>
+                <Link href="/contact" className="nav-link">
+                  ติดต่อ
+                </Link>
               </nav>
             </div>
 
-            {/* desktop actions */}
-            <div className="nav-actions">
-              <Link href="/signup" className="nav-btn signup">เปิดบัญชี</Link>
-              <Link href="/login" className="nav-btn login">เข้าสู่ระบบ</Link>
-            </div>
+            {/* desktop: auth / member menu */}
+            <NavAuth mode="desktop" />
 
             {/* hamburger (มือถือ) */}
             <label htmlFor="nav-toggle" className="nav-burger" aria-label="เปิดเมนู">
@@ -322,30 +402,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </label>
           </div>
 
-          {/* เมนู mobile: กดแล้วปิดเองเพราะ label ผูกกับ nav-toggle */}
+          {/* เมนู mobile */}
           <div className="nav-mobile-menu">
             <div className="nav-mobile-inner">
-              <label htmlFor="nav-toggle" className="nav-mobile-link">
-                <Link href="/#features">ฟีเจอร์</Link>
-              </label>
-              <label htmlFor="nav-toggle" className="nav-mobile-link">
-                <Link href="/#get">ดาวน์โหลด</Link>
-              </label>
-              <label htmlFor="nav-toggle" className="nav-mobile-link">
-                <Link href="/docs">คู่มือ</Link>
-              </label>
-              <label htmlFor="nav-toggle" className="nav-mobile-link">
-                <Link href="/contact">ติดต่อ</Link>
-              </label>
+              <Link href="/#features" className="nav-mobile-link">
+                ฟีเจอร์
+              </Link>
+              <Link href="/#get" className="nav-mobile-link">
+                ดาวน์โหลด
+              </Link>
+              <Link href="/chat" className="nav-mobile-link">
+                แชท
+              </Link>
+              <Link href="/docs" className="nav-mobile-link">
+                คู่มือ
+              </Link>
+              <Link href="/contact" className="nav-mobile-link">
+                ติดต่อ
+              </Link>
 
               <div className="nav-mobile-sep" />
 
-              <label htmlFor="nav-toggle" className="nav-mobile-link">
-                <Link href="/login">เข้าสู่ระบบ</Link>
-              </label>
-              <label htmlFor="nav-toggle" className="nav-mobile-link primary">
-                <Link href="/signup">สมัครสมาชิก</Link>
-              </label>
+              {/* mobile: auth / member menu */}
+              <NavAuth mode="mobile" />
             </div>
           </div>
         </header>
@@ -358,10 +437,35 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="footer-inner">
             <span>© {new Date().getFullYear()} CAT-ALYSIM</span>
             <span className="dot">•</span>
-            <span>v{version} — อัปเดต {lastUpdate}</span>
-            <Link href="#top" className="backtop" aria-label="กลับขึ้นบน">↑</Link>
+            <span>
+              v{version} — อัปเดต {lastUpdate}
+            </span>
+            <Link href="#top" className="backtop" aria-label="กลับขึ้นบน">
+              ↑
+            </Link>
           </div>
         </footer>
+
+        {/* สคริปต์ปิดเมนู mobile ทุกครั้งที่คลิกลิงก์ */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function() {
+              if (typeof window === 'undefined') return;
+              window.addEventListener('DOMContentLoaded', function() {
+                var toggle = document.getElementById('nav-toggle');
+                if (!toggle) return;
+                var links = document.querySelectorAll('.nav-mobile-menu a');
+                links.forEach(function(link) {
+                  link.addEventListener('click', function() {
+                    toggle.checked = false;
+                  });
+                });
+              });
+            })();
+          `,
+          }}
+        />
       </body>
     </html>
   );
