@@ -140,6 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     padding:10px 14px; border-radius:12px; font-weight:600; line-height:1; border:1px solid var(--line);
     background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
     filter: var(--glow); cursor:pointer;
+    font-size:14px;
   }
   .nav-btn.signup {
     background: radial-gradient(120% 140% at 10% -10%, rgba(0,208,132,0.5) 0%, rgba(0,208,132,0.14) 28%, rgba(255,255,255,0.03) 70%),
@@ -216,6 +217,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   .nav-user-item:hover {
     background:rgba(255,255,255,0.04);
   }
+  /* logout = แดงทั้ง desktop/mobile */
+  .nav-user-item.logout {
+    color:#ff6b6b;
+    font-weight:600;
+  }
+  .nav-user-item.logout:hover {
+    background:rgba(255,107,107,0.12);
+    color:#ffecec;
+  }
 
   /* ===== Mobile menu toggle (hamburger) ===== */
   #nav-toggle {
@@ -275,10 +285,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     background:rgba(255,255,255,0.03);
     border:1px solid rgba(255,255,255,0.04);
     font-weight:500;
+    font-size:14px;
   }
   .nav-mobile-link.primary {
     background: radial-gradient(130% 160% at 10% -10%, rgba(0,208,132,0.55) 0%, rgba(0,208,132,0.18) 30%, rgba(255,255,255,0.04) 70%);
     border-color: rgba(0,208,132,0.6);
+  }
+  .nav-mobile-link.nav-mobile-logout {
+    color:#ff6b6b;
+    font-weight:600;
+    border-color:rgba(255,107,107,0.7);
+    background:rgba(255,107,107,0.06);
+  }
+  .nav-mobile-link.nav-mobile-logout:hover {
+    background:rgba(255,107,107,0.12);
   }
 
   .nav-mobile-sep {
