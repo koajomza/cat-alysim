@@ -201,7 +201,7 @@ export default function ChatPage() {
     profileMapRef.current = profileMap;
   }, [profileMap]);
 
-  // detect mobile (เอาไว้ย้ายตำแหน่ง toast)
+  // detect mobile (เอาไว้ย้ายตำแหน่ง toast + layout)
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -540,7 +540,9 @@ export default function ChatPage() {
     return (
       <main
         style={{
-          minHeight: "100vh",
+          height: "100vh",
+          maxHeight: "100vh",
+          overflow: "hidden",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -559,8 +561,10 @@ export default function ChatPage() {
   return (
     <main
       style={{
-        minHeight: "100vh",
-        padding: "24px",
+        height: "100vh",
+        maxHeight: "100vh",
+        overflow: "hidden", // หน้าไม่ scroll เอง
+        padding: isMobile ? "8px" : "24px",
         display: "flex",
         justifyContent: "center",
         background: "#050507",
@@ -574,11 +578,14 @@ export default function ChatPage() {
           display: "flex",
           flexDirection: "column",
           gap: 16,
+          height: "100%",
+          maxHeight: "100%",
         }}
       >
         {/* Header */}
         <header
           style={{
+            flexShrink: 0,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -610,6 +617,7 @@ export default function ChatPage() {
               background: "#0a0f12",
               borderRadius: 999,
               border: "1px solid #1c2833",
+              flexShrink: 0,
             }}
           >
             {profile?.avatar_url ? (
@@ -650,7 +658,8 @@ export default function ChatPage() {
         {/* การ์ดแชท */}
         <section
           style={{
-            height: "80vh",
+            flex: 1,
+            minHeight: 0, // สำคัญมาก ให้ flex ลูก (messages) scroll ได้
             display: "flex",
             flexDirection: "column",
             background:
@@ -668,6 +677,7 @@ export default function ChatPage() {
             onScroll={handleScroll}
             style={{
               flex: 1,
+              minHeight: 0, // ให้ส่วนนี้คือ scroll area จริง
               padding: "16px 16px 8px",
               overflowY: "auto",
               display: "flex",
@@ -843,6 +853,7 @@ export default function ChatPage() {
           {/* input */}
           <div
             style={{
+              flexShrink: 0,
               padding: 12,
               borderTop: "1px solid #1c2833",
               background: "rgba(5,7,10,0.9)",
