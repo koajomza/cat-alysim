@@ -352,9 +352,10 @@ export default function ChatPage() {
           email: (row.email as string) ?? null,
           avatar_url: (row.avatar_url as string) ?? undefined,
         };
-        const id = p.id as string; // force string
-        if (!id) continue;
-        next[id] = p;
+        if (!p.id) {
+          continue;
+        }
+        next[p.id] = p;
       }
 
       if (!cancelled) {
@@ -417,26 +418,37 @@ export default function ChatPage() {
             return [...prev, msg];
           });
 
-          // ถ้ายังไม่มี profile ของ sender ให้โหลดเพิ่ม
           const senderId = msg.sender_id;
+
+          // ถ้ายังไม่มี profile ของ sender ให้โหลดเพิ่ม
           if (
             senderId &&
             (!userId || senderId !== userId) &&
             !profileMapRef.current[senderId]
           ) {
             const p = await fetchProfileById(senderId);
-            if (p && p.id) {
-              const id = p.id as string;
+            if (p) {
+              const pid = p.id || senderId;
               setProfileMap((prev) => {
-                if (prev[id]) return prev;
-                return { ...prev, [id]: p };
+                if (prev[pid]) return prev;
+                return { ...prev, [pid]: { ...p, id: pid } };
               });
             }
           }
 
-          const isMine = msg.sender_id && msg.sender_id === userId;
+          const isMine = !!(senderId && senderId === userId);
 
-          if (isAtBottomRef.current || isMine) {
+          if (isMine) {
+            // ข้อความของเราเอง แค่เลื่อนลง ไม่ต้องแจ้งเตือน
+            setTimeout(() => {
+              scrollToBottom();
+              setIsAtBottom(true);
+              isAtBottomRef.current = true;
+              setHasNewMessages(false);
+              setNewMessagesCount(0);
+            }, 10);
+          } else if (isAtBottomRef.current && !isMobile) {
+            // เดสก์ท็อป + อยู่ท้ายสุด → เลื่อนลงเฉย ๆ ไม่ต้อง toast
             setTimeout(() => {
               scrollToBottom();
               setIsAtBottom(true);
@@ -445,7 +457,7 @@ export default function ChatPage() {
               setNewMessagesCount(0);
             }, 10);
           } else {
-            // ข้อความใหม่จากคนอื่น ขณะที่เราเลื่อนขึ้นไปดูของเก่า
+            // มือถือ หรือ เราเลื่อนขึ้นไปดูของเก่า → โชว์ toast + แถบ "มีข้อความใหม่"
             setHasNewMessages(true);
             setNewMessagesCount((c) => c + 1);
 
@@ -455,8 +467,7 @@ export default function ChatPage() {
                 : msg.content || "ข้อความใหม่";
 
             const senderProfile =
-              (msg.sender_id && profileMapRef.current[msg.sender_id]) ||
-              null;
+              (senderId && profileMapRef.current[senderId]) || null;
             const senderLabel =
               msg.username ||
               resolveDisplayName(senderProfile, senderProfile?.email);
@@ -478,7 +489,7 @@ export default function ChatPage() {
         clearTimeout(toastTimerRef.current);
       }
     };
-  }, [scrollToBottom, userId]);
+  }, [scrollToBottom, userId, isMobile]);
 
   // avatar click (ยังไม่ทำอะไรพิเศษ)
   const openProfileByUser = async (
@@ -947,7 +958,7 @@ export default function ChatPage() {
             </div>
           )}
 
-          {/* toast: เดสก์ท็อปขวาล่าง / มือถือด้านบน */}
+          {/* toast: เด้งแถว ๆ เหนือช่องพิมพ์ ทั้งเดสก์ท็อปและมือถือ */}
           {toastMessage && (
             <button
               type="button"
@@ -964,8 +975,8 @@ export default function ChatPage() {
                 zIndex: 30,
                 right: isMobile ? 16 : 24,
                 left: isMobile ? 16 : "auto",
-                top: isMobile ? 16 : "auto",
-                bottom: isMobile ? "auto" : 90,
+                top: "auto",
+                bottom: 90,
                 maxWidth: isMobile ? "calc(100% - 32px)" : 320,
                 padding: "10px 14px",
                 borderRadius: 12,
