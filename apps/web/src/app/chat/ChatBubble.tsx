@@ -1,203 +1,161 @@
 // apps/web/src/app/chat/ChatBubble.tsx
 "use client";
 
-import type React from "react";
 import type { ChatMessage } from "./types";
 
 type ChatBubbleProps = {
   message: ChatMessage;
   isMine: boolean;
-  timeLabel: string;
-  onAvatarClick?: (userId: string | null, nameHint?: string | null) => void;
-  isFirstOfGroup: boolean;
+  timeLabel?: string;
+  onAvatarClick?: (senderId: string | null, username?: string | null) => void;
+  isFirstOfGroup?: boolean;
   displayName: string;
   avatarUrl?: string | null;
 };
 
-const AVATAR_SIZE = 30;
-const AVATAR_GAP = 6;
+export function ChatBubble({
+  message,
+  isMine,
+  timeLabel,
+  onAvatarClick,
+  isFirstOfGroup = true,
+}: ChatBubbleProps) {
+  const displayName = message.username || "anonymous";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
-export function ChatBubble(props: ChatBubbleProps) {
-  const {
-    message,
-    isMine,
-    timeLabel,
-    onAvatarClick,
-    isFirstOfGroup,
-    displayName,
-    avatarUrl,
-  } = props;
-
-  const text = message.content || "";
-
-  // base style ของ bubble
-  const bubbleBase: React.CSSProperties = {
-    maxWidth: "72%",
-    padding: "6px 10px",
-    borderRadius: 14,
-    fontSize: 13,
-    lineHeight: 1.4,
-    wordBreak: "break-word",
-    whiteSpace: "pre-wrap",
+  const handleAvatarClick = () => {
+    if (onAvatarClick && message.sender_id) {
+      onAvatarClick(message.sender_id, message.username ?? undefined);
+    }
   };
 
-  const mineBubble: React.CSSProperties = {
-    ...bubbleBase,
-    background:
-      "linear-gradient(135deg, rgba(0,208,132,0.18), rgba(0,208,132,0.32))",
-    border: "1px solid #00d08488",
-    color: "#e6eef8",
-    borderBottomRightRadius: 4,
-  };
+  const bubbleBg = isMine ? "#00d08433" : "#101823";
+  const bubbleBorder = isMine ? "#00d08455" : "#1f2b3a";
 
-  const otherBubble: React.CSSProperties = {
-    ...bubbleBase,
-    background: "#0a0f12",
-    border: "1px solid #1c2833",
-    color: "#e6eef8",
-    borderBottomLeftRadius: 4,
-  };
+  // แสดง avatar / ชื่อเฉพาะ "คนอื่น" + ข้อความแรกของกลุ่ม
+  const showAvatar = !isMine && isFirstOfGroup;
+  const showName = !isMine && isFirstOfGroup;
 
-  const timeStyle: React.CSSProperties = {
-    fontSize: 10,
-    color: "#9aa3ad",
-    opacity: 0.9,
-    whiteSpace: "nowrap",
-  };
-
-  const nameStyle: React.CSSProperties = {
-    fontSize: 11,
-    color: "#9aa3ad",
-    marginBottom: 2,
-  };
-
-  const initials =
-    (displayName || "??")
-      .trim()
-      .replace(/\s+/g, " ")
-      .split(" ")
-      .slice(0, 2)
-      .map((s) => s[0]?.toUpperCase() ?? "")
-      .join("") || "??";
-
-  // ✅ สำหรับฝั่งคนอื่น: โชว์ avatar ทุกบับเบิล
-  const showAvatar = !isMine;
-
-  const avatarElement = showAvatar ? (
-    <button
-      type="button"
-      onClick={() => onAvatarClick?.(message.sender_id, displayName)}
-      style={{
-        width: AVATAR_SIZE,
-        height: AVATAR_SIZE,
-        borderRadius: "50%",
-        padding: 0,
-        border: "none",
-        background: "transparent",
-        cursor: "pointer",
-        flexShrink: 0,
-      }}
-    >
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt={displayName}
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: "50%",
-            objectFit: "cover",
-            border: "1px solid #243243",
-          }}
-        />
-      ) : (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: "50%",
-            background: "#1c2833",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#e6eef8",
-            fontSize: 11,
-            fontWeight: 600,
-          }}
-        >
-          {initials}
-        </div>
-      )}
-    </button>
-  ) : null;
-
-  // ================= ฝั่งเรา (sender) =================
-  // ไม่มี avatar / เวลาอยู่นอก bubble ด้านซ้าย / bubble ชิดขวา
-  if (isMine) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: 2,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: 6,
-            maxWidth: "100%",
-          }}
-        >
-          <span style={timeStyle}>{timeLabel}</span>
-          <div style={mineBubble}>{text}</div>
-        </div>
-      </div>
-    );
-  }
-
-  // ================= ฝั่งคนอื่น =================
-  // avatar | (ชื่อ + [bubble + เวลา])
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "flex-start",
-        marginBottom: 2,
+        justifyContent: isMine ? "flex-end" : "flex-start",
+        marginTop: isFirstOfGroup ? 6 : 2,
       }}
     >
       <div
         style={{
+          maxWidth: "80%",
           display: "flex",
+          gap: 8,
+          flexDirection: isMine ? "row-reverse" : "row",
           alignItems: "flex-end",
-          gap: AVATAR_GAP,
-          maxWidth: "100%",
         }}
       >
-        {avatarElement}
+        {/* avatar เฉพาะคนอื่น */}
+        {!isMine && (
+          <button
+            type="button"
+            onClick={handleAvatarClick}
+            disabled={!message.sender_id}
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: "50%",
+              background: "#1c2833",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              flexShrink: 0,
+              cursor: message.sender_id ? "pointer" : "default",
+              border: "none",
+              padding: 0,
+              visibility: showAvatar ? "visible" : "hidden",
+            }}
+            title={
+              message.sender_id
+                ? `ดูโปรไฟล์ของ ${displayName}`
+                : undefined
+            }
+          >
+            {initials}
+          </button>
+        )}
 
+        {/* เนื้อหา bubble + ชื่อ + เวลา */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            maxWidth: "100%",
+            alignItems: isMine ? "flex-end" : "flex-start",
+            flex: 1,
+            minWidth: 0,
           }}
         >
-          {isFirstOfGroup && <div style={nameStyle}>{displayName}</div>}
+          {/* ชื่อคนอื่น แค่บรรทัดแรกของกลุ่ม */}
+          {showName && (
+            <div
+              style={{
+                fontSize: 11,
+                color: "#9aa3ad",
+                marginBottom: 2,
+              }}
+            >
+              {displayName}
+            </div>
+          )}
 
+          {/* แถว bubble + เวลา อยู่ในบรรทัดเดียวกัน */}
           <div
             style={{
               display: "flex",
+              flexDirection: isMine ? "row-reverse" : "row",
               alignItems: "flex-end",
-              gap: 6,
-              maxWidth: "100%",
+              gap: 4,
             }}
           >
-            <div style={otherBubble}>{text}</div>
-            <span style={timeStyle}>{timeLabel}</span>
+            {/* bubble */}
+            <div
+              style={{
+                background: bubbleBg,
+                borderRadius: 16,
+                padding: "6px 10px 6px",
+                border: `1px solid ${bubbleBorder}`,
+                minWidth: 0,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 13,
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                }}
+              >
+                {message.content}
+              </div>
+            </div>
+
+            {/* เวลา ข้าง ๆ bubble */}
+            {timeLabel && (
+              <div
+                style={{
+                  fontSize: 10,
+                  color: "#9aa3ad",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {timeLabel}
+              </div>
+            )}
           </div>
         </div>
+
+        {/* ฝั่งตรงข้ามของตัวเอง: เว้นช่องนิดหน่อยให้บาลานซ์ */}
+        {isMine && <div style={{ width: 28 }} />}
       </div>
     </div>
   );

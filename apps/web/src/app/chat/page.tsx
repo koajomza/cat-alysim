@@ -352,7 +352,9 @@ export default function ChatPage() {
           email: (row.email as string) ?? null,
           avatar_url: (row.avatar_url as string) ?? undefined,
         };
-        next[p.id] = p;
+        const id = p.id as string; // force string
+        if (!id) continue;
+        next[id] = p;
       }
 
       if (!cancelled) {
@@ -416,16 +418,18 @@ export default function ChatPage() {
           });
 
           // ถ้ายังไม่มี profile ของ sender ให้โหลดเพิ่ม
+          const senderId = msg.sender_id;
           if (
-            msg.sender_id &&
-            (!userId || msg.sender_id !== userId) &&
-            !profileMapRef.current[msg.sender_id]
+            senderId &&
+            (!userId || senderId !== userId) &&
+            !profileMapRef.current[senderId]
           ) {
-            const p = await fetchProfileById(msg.sender_id);
-            if (p) {
+            const p = await fetchProfileById(senderId);
+            if (p && p.id) {
+              const id = p.id as string;
               setProfileMap((prev) => {
-                if (prev[p.id]) return prev;
-                return { ...prev, [p.id]: p };
+                if (prev[id]) return prev;
+                return { ...prev, [id]: p };
               });
             }
           }
@@ -709,9 +713,14 @@ export default function ChatPage() {
               }
 
               // ดึง profile ของ sender
-              const senderProfile =
-                (m.sender_id && profileMap[m.sender_id]) ||
-                (isMine ? profile : null);
+              const senderId = m.sender_id;
+              let senderProfile: Profile | null = null;
+
+              if (senderId && profileMap[senderId]) {
+                senderProfile = profileMap[senderId];
+              } else if (isMine) {
+                senderProfile = profile;
+              }
 
               const displayName = isMine
                 ? myDisplayName
