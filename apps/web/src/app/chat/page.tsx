@@ -59,7 +59,7 @@ function formatDateLabel(iso: string) {
 
     const targetStr = d.toLocaleDateString("th-TH");
 
-    // today / yesterday (คิดแบบ Bangkok เหมือนกัน)
+    // today / yesterday (Bangkok)
     const now = new Date();
     const nowBkk = new Date(now.getTime() + BKK_OFFSET_MS);
     const todayStr = nowBkk.toLocaleDateString("th-TH");
@@ -189,6 +189,13 @@ export default function ChatPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // profile cache ของทุก sender
+  const [profileMap, setProfileMap] = useState<Record<string, Profile>>({});
+  const profileMapRef = useRef<Record<string, Profile>>({});
+  useEffect(() => {
+    profileMapRef.current = profileMap;
+  }, [profileMap]);
+
   // detect mobile (เอาไว้ย้ายตำแหน่ง toast)
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -300,6 +307,54 @@ export default function ChatPage() {
       created_at: row.created_at ?? new Date().toISOString(),
     });
 
+    const prefetchProfilesForMessages = async (rows: ChatMessage[]) => {
+      const ids = Array.from(
+        new Set(
+          rows
+            .map((m) => m.sender_id)
+            .filter(
+              (id): id is string =>
+                !!id && (!userId || id !== userId),
+            ),
+        ),
+      );
+      if (!ids.length) return;
+
+      // ตัดตัวที่มีใน cache แล้วออก
+      const missing = ids.filter((id) => !profileMapRef.current[id]);
+      if (!missing.length) return;
+
+      const { data, error } = await supabase
+        .from("user_profiles")
+        .select(
+          "id, username, nickname, full_name, og_name, email, avatar_url",
+        )
+        .in("id", missing);
+
+      if (error) {
+        console.warn("[chat] prefetchProfiles error:", error.message);
+        return;
+      }
+
+      const next: Record<string, Profile> = {};
+      for (const row of data ?? []) {
+        const p: Profile = {
+          id: row.id as string,
+          username: (row.username as string) ?? null,
+          nickname: (row.nickname as string) ?? null,
+          full_name: (row.full_name as string) ?? null,
+          og_name: (row.og_name as string) ?? null,
+          email: (row.email as string) ?? null,
+          avatar_url: (row.avatar_url as string) ?? undefined,
+        };
+        next[p.id] = p;
+      }
+
+      if (!cancelled) {
+        setProfileMap((prev) => ({ ...prev, ...next }));
+      }
+    };
+
     const load = async () => {
       try {
         const { data, error } = await supabase
@@ -324,6 +379,8 @@ export default function ChatPage() {
             setIsAtBottom(true);
             isAtBottomRef.current = true;
           }, 10);
+
+          prefetchProfilesForMessages(mapped);
         }
       } catch (e) {
         console.error("load chat exception:", e);
@@ -343,7 +400,7 @@ export default function ChatPage() {
           table: "chat_messages",
           filter: "room_id=eq.global",
         },
-        (payload: any) => {
+        async (payload: any) => {
           const row = (payload.new ?? payload.record ?? payload) as any;
           if (!row) return;
           const msg = mapRow(row);
@@ -353,7 +410,22 @@ export default function ChatPage() {
             return [...prev, msg];
           });
 
-          const isMine = row.sender_id && row.sender_id === userId;
+          // ถ้ายังไม่มี profile ของ sender ให้โหลดเพิ่ม
+          if (
+            msg.sender_id &&
+            (!userId || msg.sender_id !== userId) &&
+            !profileMapRef.current[msg.sender_id]
+          ) {
+            const p = await fetchProfileById(msg.sender_id);
+            if (p) {
+              setProfileMap((prev) => {
+                if (prev[p.id]) return prev;
+                return { ...prev, [p.id]: p };
+              });
+            }
+          }
+
+          const isMine = msg.sender_id && msg.sender_id === userId;
 
           if (isAtBottomRef.current || isMine) {
             setTimeout(() => {
@@ -373,7 +445,13 @@ export default function ChatPage() {
                 ? msg.content.slice(0, 40) + "…"
                 : msg.content || "ข้อความใหม่";
 
-            const senderLabel = msg.username || "ไม่ระบุ";
+            const senderProfile =
+              (msg.sender_id && profileMapRef.current[msg.sender_id]) ||
+              null;
+            const senderLabel =
+              msg.username ||
+              resolveDisplayName(senderProfile, senderProfile?.email);
+
             showToast(`${senderLabel}: ${previewText}`);
           }
         },
@@ -625,6 +703,20 @@ export default function ChatPage() {
                 isFirstOfGroup = false;
               }
 
+              // ดึง profile ของ sender
+              const senderProfile =
+                (m.sender_id && profileMap[m.sender_id]) ||
+                (isMine ? profile : null);
+
+              const displayName = isMine
+                ? myDisplayName
+                : m.username ||
+                  resolveDisplayName(senderProfile, senderProfile?.email ?? null);
+
+              const avatarUrl =
+                senderProfile?.avatar_url ??
+                (isMine ? profile?.avatar_url ?? null : null);
+
               return (
                 <Fragment key={m.id}>
                   {showDateHeader && (
@@ -656,10 +748,13 @@ export default function ChatPage() {
                     timeLabel={timeLabel}
                     onAvatarClick={openProfileByUser}
                     isFirstOfGroup={isFirstOfGroup}
+                    displayName={displayName}
+                    avatarUrl={avatarUrl}
                   />
                 </Fragment>
               );
             })}
+
 
             <div ref={bottomRef} />
           </div>

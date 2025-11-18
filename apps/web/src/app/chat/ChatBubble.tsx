@@ -6,9 +6,11 @@ import type { ChatMessage } from "./types";
 type ChatBubbleProps = {
   message: ChatMessage;
   isMine: boolean;
-  timeLabel?: string;
+  timeLabel: string;
   onAvatarClick?: (senderId: string | null, username?: string | null) => void;
   isFirstOfGroup?: boolean;
+  displayName: string;
+  avatarUrl?: string | null;
 };
 
 export function ChatBubble({
@@ -17,29 +19,106 @@ export function ChatBubble({
   timeLabel,
   onAvatarClick,
   isFirstOfGroup = true,
+  displayName,
+  avatarUrl,
 }: ChatBubbleProps) {
-  const displayName = message.username || "anonymous";
-  const initials = displayName.slice(0, 2).toUpperCase();
-
   const handleAvatarClick = () => {
     if (onAvatarClick && message.sender_id) {
-      onAvatarClick(message.sender_id, message.username ?? undefined);
+      onAvatarClick(message.sender_id, displayName || undefined);
     }
   };
+
+  const initials = (displayName || message.username || "?")
+    .slice(0, 2)
+    .toUpperCase();
 
   const bubbleBg = isMine ? "#00d08433" : "#101823";
   const bubbleBorder = isMine ? "#00d08455" : "#1f2b3a";
 
-  // แสดง avatar / ชื่อเฉพาะ "คนอื่น" + ข้อความแรกของกลุ่ม
-  const showAvatar = !isMine && isFirstOfGroup;
-  const showName = !isMine && isFirstOfGroup;
+  // avatar / spacer
+  let avatarNode: React.ReactNode = (
+    <div style={{ width: 28, height: 28 }} />
+  );
+
+  if (isFirstOfGroup) {
+    const hasAvatar = !!avatarUrl;
+
+    if (hasAvatar) {
+      // มีรูป → ใช้ img
+      avatarNode = (
+        <button
+          type="button"
+          onClick={handleAvatarClick}
+          disabled={!message.sender_id}
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: "50%",
+            overflow: "hidden",
+            border: "1px solid #243243",
+            flexShrink: 0,
+            padding: 0,
+            background: "transparent",
+            cursor: message.sender_id ? "pointer" : "default",
+          }}
+          title={
+            message.sender_id
+              ? `ดูโปรไฟล์ของ ${displayName || "anonymous"}`
+              : undefined
+          }
+        >
+          <img
+            src={avatarUrl as string}
+            alt={displayName || "avatar"}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        </button>
+      );
+    } else {
+      // ไม่มีรูป → ใช้ตัวอักษรย่อ
+      avatarNode = (
+        <button
+          type="button"
+          onClick={handleAvatarClick}
+          disabled={!message.sender_id}
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: "50%",
+            background: isMine ? "#00d08433" : "#1c2833",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 12,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            flexShrink: 0,
+            cursor: message.sender_id ? "pointer" : "default",
+            border: "none",
+            padding: 0,
+          }}
+          title={
+            message.sender_id
+              ? `ดูโปรไฟล์ของ ${displayName || "anonymous"}`
+              : undefined
+          }
+        >
+          {initials}
+        </button>
+      );
+    }
+  }
 
   return (
     <div
       style={{
         display: "flex",
         justifyContent: isMine ? "flex-end" : "flex-start",
-        marginTop: isFirstOfGroup ? 6 : 2,
       }}
     >
       <div
@@ -51,109 +130,85 @@ export function ChatBubble({
           alignItems: "flex-end",
         }}
       >
-        {/* avatar เฉพาะคนอื่น */}
-        {!isMine && (
-          <button
-            type="button"
-            onClick={handleAvatarClick}
-            disabled={!message.sender_id}
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: "50%",
-              background: "#1c2833",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              flexShrink: 0,
-              cursor: message.sender_id ? "pointer" : "default",
-              border: "none",
-              padding: 0,
-              visibility: showAvatar ? "visible" : "hidden",
-            }}
-            title={
-              message.sender_id
-                ? `ดูโปรไฟล์ของ ${displayName}`
-                : undefined
-            }
-          >
-            {initials}
-          </button>
-        )}
+        {/* avatar / spacer */}
+        {avatarNode}
 
-        {/* เนื้อหา bubble + ชื่อ + เวลา */}
+        {/* bubble + timestamp */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: isMine ? "flex-end" : "flex-start",
-            flex: 1,
-            minWidth: 0,
           }}
         >
-          {/* ชื่อคนอื่น แค่บรรทัดแรกของกลุ่ม */}
-          {showName && (
-            <div
-              style={{
-                fontSize: 11,
-                color: "#9aa3ad",
-                marginBottom: 2,
-              }}
-            >
-              {displayName}
-            </div>
-          )}
-
-          {/* แถว bubble + เวลา อยู่ในบรรทัดเดียวกัน */}
           <div
             style={{
-              display: "flex",
-              flexDirection: isMine ? "row-reverse" : "row",
-              alignItems: "flex-end",
-              gap: 4,
+              background: bubbleBg,
+              borderRadius: 16,
+              padding: "6px 10px 6px",
+              border: `1px solid ${bubbleBorder}`,
+              minWidth: 0,
             }}
           >
-            {/* bubble */}
-            <div
-              style={{
-                background: bubbleBg,
-                borderRadius: 16,
-                padding: "6px 10px 6px",
-                border: `1px solid ${bubbleBorder}`,
-                minWidth: 0,
-              }}
-            >
+            {/* header: ชื่อ + เวลา (เฉพาะคนอื่น) */}
+            {!isMine && (
               <div
                 style={{
-                  fontSize: 13,
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                }}
-              >
-                {message.content}
-              </div>
-            </div>
-
-            {/* เวลา ข้าง ๆ bubble */}
-            {timeLabel && (
-              <div
-                style={{
-                  fontSize: 10,
+                  fontSize: 11,
                   color: "#9aa3ad",
-                  whiteSpace: "nowrap",
+                  marginBottom: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 8,
                 }}
               >
-                {timeLabel}
+                <button
+                  type="button"
+                  onClick={handleAvatarClick}
+                  disabled={!message.sender_id}
+                  style={{
+                    padding: 0,
+                    margin: 0,
+                    background: "transparent",
+                    border: "none",
+                    color: "inherit",
+                    fontSize: "inherit",
+                    fontWeight: 500,
+                    cursor: message.sender_id ? "pointer" : "default",
+                    textAlign: "left",
+                  }}
+                >
+                  {displayName || "anonymous"}
+                </button>
+                <span>{timeLabel}</span>
               </div>
             )}
-          </div>
-        </div>
 
-        {/* ฝั่งตรงข้ามของตัวเอง: เว้นช่องนิดหน่อยให้บาลานซ์ */}
-        {isMine && <div style={{ width: 28 }} />}
+            {/* เนื้อข้อความ */}
+            <div
+              style={{
+                fontSize: 13,
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
+              }}
+            >
+              {message.content}
+            </div>
+          </div>
+
+          {/* เวลาของตัวเองอยู่ข้างล่าง */}
+          {isMine && (
+            <div
+              style={{
+                marginTop: 2,
+                fontSize: 11,
+                color: "#9aa3ad",
+              }}
+            >
+              {timeLabel}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
