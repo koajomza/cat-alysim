@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { UIEvent, KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -187,10 +188,14 @@ export default function ChatPage() {
 
   // toast state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   // profile cache ของทุก sender
-  const [profileMap, setProfileMap] = useState<Record<string, Profile>>({});
+  const [profileMap, setProfileMap] = useState<Record<string, Profile>>(
+    {},
+  );
   const profileMapRef = useRef<Record<string, Profile>>({});
   useEffect(() => {
     profileMapRef.current = profileMap;
@@ -228,7 +233,7 @@ export default function ChatPage() {
     }
   }, []);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
     const threshold = 80;
     const atBottom =
@@ -508,7 +513,7 @@ export default function ChatPage() {
   };
 
   const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLTextAreaElement>,
+    e: KeyboardEvent<HTMLTextAreaElement>,
   ) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -711,7 +716,10 @@ export default function ChatPage() {
               const displayName = isMine
                 ? myDisplayName
                 : m.username ||
-                  resolveDisplayName(senderProfile, senderProfile?.email ?? null);
+                  resolveDisplayName(
+                    senderProfile,
+                    senderProfile?.email ?? null,
+                  );
 
               const avatarUrl =
                 senderProfile?.avatar_url ??
@@ -754,7 +762,6 @@ export default function ChatPage() {
                 </Fragment>
               );
             })}
-
 
             <div ref={bottomRef} />
           </div>
@@ -804,7 +811,9 @@ export default function ChatPage() {
                 />
                 <span>
                   มีข้อความใหม่
-                  {newMessagesCount > 0 ? ` ${newMessagesCount} ข้อความ` : ""}
+                  {newMessagesCount > 0
+                    ? ` ${newMessagesCount} ข้อความ`
+                    : ""}
                   — แตะเพื่อเลื่อนไปท้ายสุด
                 </span>
               </button>
