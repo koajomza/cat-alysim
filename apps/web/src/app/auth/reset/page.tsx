@@ -7,16 +7,58 @@ import { supabase } from "@/lib/supabaseClient";
 
 type Stage = "checking" | "ready" | "done" | "error" | "missing";
 
-function parseHash() {
+type TokenBundle = {
+  access_token: string;
+  refresh_token: string;
+  type: string;
+};
+
+function parseTokens(): TokenBundle | null {
   if (typeof window === "undefined") return null;
-  const hash = window.location.hash || "";
-  if (!hash.startsWith("#")) return null;
-  const params = new URLSearchParams(hash.substring(1));
-  const access_token = params.get("access_token") || "";
-  const refresh_token = params.get("refresh_token") || "";
-  const type = params.get("type") || "";
-  if (!access_token || !refresh_token) return null;
-  return { access_token, refresh_token, type };
+
+  const tryParse = (raw: string | null | undefined): TokenBundle | null => {
+    if (!raw) return null;
+    let s = raw;
+    if (s.startsWith("#") || s.startsWith("?")) {
+      s = s.substring(1);
+    }
+    const params = new URLSearchParams(s);
+
+    const access_token = params.get("access_token") || "";
+    const refresh_token = params.get("refresh_token") || "";
+    const type = params.get("type") || "";
+
+    if (!access_token || !refresh_token) return null;
+    return { access_token, refresh_token, type };
+  };
+
+  // ลองดู hash ก่อน (#access_token=...) ถ้าไม่มีค่อยไปดู query (?access_token=...)
+  const fromHash = tryParse(window.location.hash);
+  if (fromHash) {
+    console.log("[reset] tokens from hash:", {
+      hasAccess: !!fromHash.access_token,
+      hasRefresh: !!fromHash.refresh_token,
+      type: fromHash.type,
+    });
+    return fromHash;
+  }
+
+  const fromQuery = tryParse(window.location.search);
+  if (fromQuery) {
+    console.log("[reset] tokens from query:", {
+      hasAccess: !!fromQuery.access_token,
+      hasRefresh: !!fromQuery.refresh_token,
+      type: fromQuery.type,
+    });
+    return fromQuery;
+  }
+
+  console.warn("[reset] no token found in hash or query", {
+    href: window.location.href,
+    hash: window.location.hash,
+    search: window.location.search,
+  });
+  return null;
 }
 
 export default function ResetPage() {
@@ -29,7 +71,9 @@ export default function ResetPage() {
 
   useEffect(() => {
     const run = async () => {
-      const parsed = parseHash();
+      console.log("[reset] href =", typeof window !== "undefined" ? window.location.href : "");
+
+      const parsed = parseTokens();
       if (!parsed) {
         setStage("missing");
         setMsg("ลิงก์ไม่ถูกต้อง หรือขาดข้อมูล access_token / refresh_token");
@@ -38,12 +82,17 @@ export default function ResetPage() {
 
       try {
         const { access_token, refresh_token, type } = parsed;
-        console.log("[reset] parsed", { type });
+        console.log("[reset] parsed tokens:", {
+          hasAccess: !!access_token,
+          hasRefresh: !!refresh_token,
+          type,
+        });
 
         const { error } = await supabase.auth.setSession({
           access_token,
           refresh_token,
         });
+
         if (error) {
           console.error("[reset] setSession error", error);
           setStage("error");
@@ -52,7 +101,6 @@ export default function ResetPage() {
         }
 
         if (type !== "recovery") {
-          // technicallyไม่ใช่ลิงก์ reset แต่ก็ให้คนเปลี่ยนได้อยู่ดี
           console.warn("[reset] type is not recovery:", type);
         }
 
@@ -61,7 +109,7 @@ export default function ResetPage() {
       } catch (e: any) {
         console.error("[reset] unexpected error", e);
         setStage("error");
-        setMsg(`เกิดข้อผิดพลาด: ${e?.message || e}`);
+        setMsg(`เกิดข้อผิดพลาด: ${e?.message || String(e)}`);
       }
     };
 
@@ -111,7 +159,7 @@ export default function ResetPage() {
     } catch (e: any) {
       console.error("[reset] unexpected error", e);
       setStage("error");
-      setMsg(`เกิดข้อผิดพลาด: ${e?.message || e}`);
+      setMsg(`เกิดข้อผิดพลาด: ${e?.message || String(e)}`);
       setSubmitting(false);
     }
   };
@@ -127,7 +175,7 @@ export default function ResetPage() {
       ? "เกิดข้อผิดพลาด"
       : "กำลังตรวจสอบลิงก์...";
 
-  const disabled = submitting || !(stage === "ready");
+  const disabled = submitting || stage !== "ready";
 
   return (
     <main
