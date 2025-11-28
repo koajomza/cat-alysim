@@ -43,7 +43,7 @@ const FEATURES: Feature[] = [
 // ถ้าไม่ตั้ง จะ fallback เป็น Supabase app-updates bucket ตาม project ที่ให้มา
 const INSTALLER_URL =
   process.env.NEXT_PUBLIC_INSTALLER_URL ||
-  "https://download.cat-alysim.com/CAT-ALYSIM-Setup.exe";
+  "https://download.cat-alysim.com/CAT-ALYSIM_Setup.exe";
 
 const MANUAL_URL =
   process.env.NEXT_PUBLIC_MANUAL_URL ||
