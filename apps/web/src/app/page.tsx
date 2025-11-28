@@ -38,6 +38,19 @@ const FEATURES: Feature[] = [
   },
 ];
 
+// ====== URL ดาวน์โหลดจาก Supabase / ENV ======
+// ถ้าตั้ง NEXT_PUBLIC_INSTALLER_URL / NEXT_PUBLIC_MANUAL_URL ไว้ จะใช้ค่านั้น
+// ถ้าไม่ตั้ง จะ fallback เป็น Supabase app-updates bucket ตาม project ที่ให้มา
+const INSTALLER_URL =
+  process.env.NEXT_PUBLIC_INSTALLER_URL ||
+  "https://download.cat-alysim.com/CAT-ALYSIM_Setup.exe";
+
+const MANUAL_URL =
+  process.env.NEXT_PUBLIC_MANUAL_URL ||
+  "https://aqjomvjzmvgwlvdhficv.supabase.co/storage/v1/object/public/app-updates/CAT-ALYSIM-Manual.pdf";
+
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || "dev";
+
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -231,7 +244,9 @@ export default function HomePage() {
               </p>
               <ul className="feature-list">
                 <li>รองรับเลขบัตร ปชช. ชื่อ-สกุล ที่อยู่ วันเดือนปีเกิด</li>
-                <li>ดึงข้อมูลออกมา post-process ต่อได้ (เช่น แยกตำบล/อำเภอ/จังหวัด)</li>
+                <li>
+                  ดึงข้อมูลออกมา post-process ต่อได้ (เช่น แยกตำบล/อำเภอ/จังหวัด)
+                </li>
                 <li>ต่อยอดไปอ่านสำเนาบัตร, TR14, Passport ได้ในอนาคต</li>
               </ul>
             </div>
@@ -302,24 +317,30 @@ export default function HomePage() {
             </p>
 
             <div className="download-buttons">
-              {/* TODO: เปลี่ยน href เป็นลิงก์จริงตอน build installer เสร็จ */}
               <a
                 className="btn btn-primary full"
-                href="/downloads/CAT-ALYSIM-Setup.exe"
+                href={INSTALLER_URL}
+                // ให้ browser รู้ว่าเป็นไฟล์ดาวน์โหลดใหญ่
+                rel="noreferrer"
               >
                 ดาวน์โหลดสำหรับ Windows (.exe)
               </a>
               <a
                 className="btn btn-ghost full"
-                href="/downloads/CAT-ALYSIM-Manual.pdf"
+                href={MANUAL_URL}
+                target="_blank"
+                rel="noreferrer"
               >
                 คู่มือการติดตั้ง / การใช้งาน (PDF)
               </a>
             </div>
 
             <div className="download-note">
-              * ลิงก์ด้านบนเป็น mock ไว้ก่อน เปลี่ยนเป็นไฟล์จริงในโฟลเดอร์{" "}
-              <code>public/downloads</code> ทีหลังได้เลย
+              เวอร์ชันปัจจุบัน:{" "}
+              <code>{APP_VERSION}</code>{" "}
+              · ไฟล์ถูกดึงจาก Supabase bucket <code>app-updates</code> —
+              ถ้ากดแล้วโหลดไม่ได้ ให้เช็ค URL ใน <code>.env</code>{" "}
+              (NEXT_PUBLIC_INSTALLER_URL / NEXT_PUBLIC_MANUAL_URL)
             </div>
           </div>
 
